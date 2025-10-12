@@ -1,0 +1,62 @@
+<div class="flex justify-center min-h-screen items-start">
+  <div class="bg-gray-100 p-8 rounded-md shadow-md w-full max-w-md">
+    <h2 class="text-xl font-bold mb-6 text-center">
+      {{ isAdminCreatingUser ? 'Registrar Usuario' : 'Crear cuenta en el Aula Virtual' }}
+    </h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <!-- Nombre -->
+      <div class="mb-4">
+        <label class="block mb-2 font-medium">Nombre</label>
+        <input type="text" pInputText class="w-full" formControlName="nombre" />
+        <small class="text-red-500 mt-2" *ngIf="nombre.invalid && nombre.touched">
+          El nombre es obligatorio.
+        </small>
+      </div>
+
+      <!-- Apellido -->
+      <div class="mb-4">
+        <label class="block mb-2 font-medium">Apellido</label>
+        <input type="text" pInputText class="w-full" formControlName="apellido" />
+        <small class="text-red-500 mt-2" *ngIf="apellido.invalid && apellido.touched">
+          El apellido es obligatorio.
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-4">
+        <label class="block mb-2 font-medium">Email</label>
+        <input type="email" pInputText class="w-full" formControlName="email" />
+        <small class="text-red-500 mt-2" *ngIf="email.invalid && email.touched">
+          <ng-container *ngIf="email.errors?.['required']">El email es obligatorio.</ng-container>
+          <ng-container *ngIf="email.errors?.['email']">El email no es válido.</ng-container>
+        </small>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-4">
+        <label class="block mb-2 font-medium">Contraseña</label>
+        <input type="password" pPassword class="w-full" formControlName="password" />
+        <small class="text-red-500 mt-2" *ngIf="password.invalid && password.touched">
+          La contraseña es obligatoria.
+        </small>
+      </div>
+
+      <!-- Errores -->
+      <div class="mb-2">
+        <p *ngIf="errorMessage" class="text-red-500 mt-2">{{ errorMessage }}</p>
+        <p *ngIf="successMessage" class="text-green-500 mt-2">{{ successMessage }}</p>
+      </div>
+
+      <button pButton type="submit" label="Registrarse" class="w-full" [disabled]="loading"></button>
+    </form>
+
+    <div class="mt-4 text-center" *ngIf="!isAdminCreatingUser">
+      <p class="text-sm text-gray-600">
+        ¿Ya tenés una cuenta?
+        <a href="/login" class="text-blue-600 hover:underline font-medium cursor-pointer">Iniciá sesión</a>
+      </p>
+    </div>
+  </div>
+</div>
+
