@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
-// import { IUsuario } from '../app/models/';
+import { IUsuario } from '../app/models/usuario.models';
 
 @Injectable({
   providedIn: 'root'
