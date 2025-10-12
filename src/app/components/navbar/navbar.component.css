@@ -1,0 +1,13 @@
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+button:focus {
+  outline: none;
+}
+
+.p-button {
+  font-size: 0.9rem;
+}

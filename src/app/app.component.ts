@@ -3,16 +3,17 @@ import { NavigationEnd, Router } from '@angular/router';
 import { LayoutComponent } from "./layout/layout.component";
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../services/authService';
-//import { NavbarComponent } from "./navbar/navbar.component";
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 
 @Component({
   selector: 'app-root',
-  imports: [LayoutComponent, CommonModule ],
-  providers: [MessageService, ConfirmationService],
+  standalone: true,
+  imports: [LayoutComponent, CommonModule, NavbarComponent],
+  providers: [MessageService, ConfirmationService, ],
   templateUrl: './app.component.html',
   styleUrl: './app.css'
 })

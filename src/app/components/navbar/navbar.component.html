@@ -1,0 +1,63 @@
+<nav class="bg-gray-800">
+  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div class="relative flex h-16 items-center justify-between">
+
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a href="/" class="text-white">
+          Aula virtual
+        </a>
+      </div>
+
+      <!-- Menú principal -->
+      <div class="hidden sm:block">
+        <div class="flex space-x-4">
+          <ng-container *ngFor="let item of menuItems">
+            <div
+              *ngIf="item.visible()"
+              class="relative"
+              (mouseenter)="showMenus[item.submenuKey] = true"
+              (mouseleave)="showMenus[item.submenuKey] = false"
+            >
+              <button
+                class="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              >
+                {{ item.label }}
+              </button>
+
+              <!-- Submenú -->
+              <div
+                class="absolute left-0 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
+                *ngIf="showMenus[item.submenuKey]"
+              >
+                <div class="py-1">
+                  <ng-container *ngFor="let sub of item.submenu">
+                    <a
+                      *ngIf="sub.visible()"
+                      [href]="sub.path"
+                      routerLinkActive="bg-gray-100 text-gray-900"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    >
+                      {{ sub.label }}
+                    </a>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Botón Logout -->
+      <div class="flex items-center">
+        <p-button
+          icon="pi pi-sign-out"
+          label="Cerrar sesión"
+          (click)="authService.logout()"
+          styleClass="p-button-sm p-button-danger"
+        />
+      </div>
+    </div>
+  </div>
+</nav>
+
