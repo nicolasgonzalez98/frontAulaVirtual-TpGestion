@@ -6,6 +6,7 @@ import { LoginComponent } from './components/login/login.component';
 import { GuestGuard } from './guards/guest.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
+import { RegistroEstablecimientoComponent } from './components/registro-establecimiento/registro-establecimiento.component';
 
 export const routes: Routes = [
     {
@@ -14,6 +15,7 @@ export const routes: Routes = [
         children: [
             { path: 'register', component: RegisterComponent, canActivate: [GuestGuard]},
             { path: 'login', component: LoginComponent, canActivate: [GuestGuard]},
+            { path: 'registro-establecimiento',component: RegistroEstablecimientoComponent, canActivate: [GuestGuard]}
         ]
     }
 ];

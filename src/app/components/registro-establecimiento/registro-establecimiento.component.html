@@ -1,0 +1,60 @@
+<div class="max-w-3xl mx-auto mt-10 bg-gray-200 shadow-md rounded-lg p-8">
+  <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">
+    Registro de Establecimiento
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+    <div>
+      <label class="block text-sm font-medium mb-1">Nombre del establecimiento *</label>
+      <input pInputText formControlName="nombre" class="w-full" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Dirección *</label>
+      <input pInputText formControlName="direccion" class="w-full" />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Teléfono</label>
+        <input pInputText formControlName="telefono" class="w-full" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Email del establecimiento *</label>
+        <input pInputText formControlName="emailEstablecimiento" class="w-full" />
+      </div>
+    </div>
+
+    <hr class="my-4" />
+
+    <h3 class="text-lg font-semibold text-gray-700">Datos del responsable</h3>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Nombre completo *</label>
+      <input pInputText formControlName="responsableNombre" class="w-full" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Email del responsable *</label>
+      <input pInputText formControlName="responsableEmail" class="w-full" />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Contraseña *</label>
+        <input pInputText type="password" formControlName="password" class="w-full" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Confirmar contraseña *</label>
+        <input pInputText type="password" formControlName="confirmPassword" class="w-full" />
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <p-button label="Registrar" icon="pi pi-save" [loading]="loading" type="submit" />
+    </div>
+  </form>
+
+  <p-toast></p-toast>
+</div>
+
