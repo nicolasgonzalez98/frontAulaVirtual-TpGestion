@@ -12,6 +12,21 @@
     <div>
       <label class="block text-sm font-medium mb-1">Dirección *</label>
       <input pInputText formControlName="direccion" class="w-full" />
+      <p-button
+          label="Validar dirección"
+          icon="pi pi-map-marker"
+          (click)="validarDireccion()"
+          [loading]="loading"
+          severity="secondary"
+          type="button"
+        />
+
+        <div *ngIf="direccionValida === true" class="text-green-600 text-sm mt-2">
+        ✅ Dirección verificada correctamente.
+        </div>
+        <div *ngIf="direccionValida === false" class="text-red-600 text-sm mt-2">
+          ❌ Dirección no válida o fuera de Argentina.
+        </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
