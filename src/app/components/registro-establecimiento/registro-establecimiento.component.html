@@ -1,0 +1,74 @@
+<div class="max-w-lg mx-auto mt-10">
+
+  <!-- Bloque de info previa -->
+  <div class="mb-6 p-6 rounded-lg shadow-lg text-center bg-gradient-to-r from-blue-100 to-blue-50 border border-blue-200">
+    <div class="flex justify-center mb-4">
+      <!-- Icono representativo (puede ser un edificio, escuela, gym, etc.) -->
+      <img src="https://cdn-icons-png.flaticon.com/512/2910/2910763.png" alt="Gestión" class="h-16 w-16" />
+    </div>
+    <h2 class="text-2xl font-bold text-blue-700 mb-2">¡Bienvenido!</h2>
+    <p class="text-gray-700 mb-2">
+      Registrá tu establecimiento y empezá a gestionar tus cursos de manera sencilla y centralizada.
+    </p>
+    <p class="text-gray-600 text-sm">
+      Una vez registrado, recibirás un usuario administrador para poder gestionar tus cursos, docentes y alumnos desde nuestra plataforma.
+    </p>
+  </div>
+
+  <!-- Formulario -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold mb-4">Registrar Establecimiento</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Nombre del Establecimiento</label>
+        <input pInputText formControlName="nombre" class="w-full" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Dirección</label>
+        <input #direccionInput pInputText formControlName="direccion" class="w-full" placeholder="Ej: Av. Rivadavia 1234, Buenos Aires" />
+      </div>
+
+      <div *ngIf="direccionValida" class="text-green-600 text-sm mb-4">
+        ✅ Dirección válida (Lat: {{latitud}}, Lng: {{longitud}})
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Teléfono</label>
+        <input pInputText formControlName="telefono" class="w-full" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Email del Establecimiento</label>
+        <input pInputText formControlName="emailEstablecimiento" class="w-full" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Nombre del Responsable</label>
+        <input pInputText formControlName="responsableNombre" class="w-full" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Email del Responsable</label>
+        <input pInputText formControlName="responsableEmail" class="w-full" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Contraseña</label>
+        <input type="password" pInputText formControlName="password" class="w-full" />
+      </div>
+
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Confirmar Contraseña</label>
+        <input type="password" pInputText formControlName="confirmPassword" class="w-full" />
+      </div>
+
+      <button pButton type="submit" label="Registrar Establecimiento" [loading]="loading" class="w-full"></button>
+    </form>
+
+    <p-toast></p-toast>
+  </div>
+</div>
+
+
