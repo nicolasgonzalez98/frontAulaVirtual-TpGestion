@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -8,7 +8,11 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { GoogleMapsLoaderService } from '../../../services/google-maps-loader.service';
+import { EstablecimientosService } from '../../../services/establecimientoService';
 
+
+declare const google: any;
 @Component({
   selector: 'app-registro-establecimiento',
   standalone: true,
@@ -17,16 +21,24 @@ import { Router } from '@angular/router';
   templateUrl: './registro-establecimiento.component.html',
   styleUrl: './registro-establecimiento.component.css'
 })
-export class RegistroEstablecimientoComponent {
+
+
+export class RegistroEstablecimientoComponent implements AfterViewInit {
+  @ViewChild('direccionInput') direccionInput!: ElementRef<HTMLInputElement>;
+
   form: FormGroup;
   loading = false;
-  direccionValida: boolean | null = null; // null = no validada aún
+  direccionValida: boolean | null = null;
+  latitud: number | null = null;
+  longitud: number | null = null;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private googleMapsLoader: GoogleMapsLoaderService,
+    private establecimientosService: EstablecimientosService
   ) {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
@@ -40,92 +52,87 @@ export class RegistroEstablecimientoComponent {
     });
   }
 
-  async validarDireccion() {
-    const direccion = this.form.value.direccion;
-    if (!direccion) {
-      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'Ingrese una dirección antes de validar.' });
+  ngAfterViewInit(): void {
+    this.googleMapsLoader.load(() => this.initAutocomplete());
+  }
+
+  private initAutocomplete(): void {
+    if (!('google' in window)) {
+      console.error('❌ Google Maps no se cargó correctamente.');
       return;
     }
 
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-      direccion
-    )}&format=json&addressdetails=1&countrycodes=ar`;
+    const autocomplete = new google.maps.places.Autocomplete(
+      this.direccionInput.nativeElement,
+      {
+        componentRestrictions: { country: 'ar' },
+        fields: ['geometry', 'formatted_address']
+      }
+    );
 
-    this.loading = true;
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
 
-    try {
-      const results: any = await this.http.get(url).toPromise();
+      if (place.geometry) {
+        this.form.patchValue({ direccion: place.formatted_address });
+        this.latitud = place.geometry.location?.lat() ?? null;
+        this.longitud = place.geometry.location?.lng() ?? null;
+        this.direccionValida = true;
 
-      if (results && results.length > 0) {
-        const place = results[0];
-        const { lat, lon, display_name, address } = place;
+        console.log('✅ Dirección seleccionada:', place.formatted_address);
+        console.log('📍 Coordenadas:', this.latitud, this.longitud);
 
-        // Validar país (por si algún resultado extraño no es Argentina)
-        if (address?.country_code === 'ar') {
-          this.direccionValida = true;
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Dirección válida',
-            detail: display_name
-          });
-
-          console.log('✅ Dirección válida:', {
-            direccion: display_name,
-            latitud: parseFloat(lat),
-            longitud: parseFloat(lon),
-            address
-          });
-        } else {
-          this.direccionValida = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Dirección fuera de Argentina',
-            detail: 'Por favor ingresa una dirección dentro de Argentina.'
-          });
-        }
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Dirección seleccionada',
+          detail: place.formatted_address
+        });
       } else {
         this.direccionValida = false;
         this.messageService.add({
-          severity: 'error',
-          summary: 'Dirección no encontrada',
-          detail: 'No se pudo validar la dirección ingresada.'
+          severity: 'warn',
+          summary: 'No se encontró la dirección',
+          detail: 'Por favor seleccione una sugerencia válida.'
         });
       }
-    } catch (err) {
-      console.error(err);
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Hubo un problema al validar la dirección.'
-      });
-    } finally {
-      this.loading = false;
-    }
+    });
   }
 
   onSubmit() {
     if (!this.direccionValida) {
-      this.messageService.add({ severity: 'warn', summary: 'Validación requerida', detail: 'Por favor valida la dirección antes de registrar.' });
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Validación requerida',
+        detail: 'Seleccioná una dirección válida de las sugerencias.'
+      });
       return;
     }
 
     if (this.form.invalid) {
-      this.messageService.add({ severity: 'warn', summary: 'Campos incompletos', detail: 'Por favor completa todos los campos requeridos.' });
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Campos incompletos',
+        detail: 'Por favor completá todos los campos requeridos.'
+      });
       return;
     }
 
     if (this.form.value.password !== this.form.value.confirmPassword) {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Las contraseñas no coinciden.' });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Las contraseñas no coinciden.'
+      });
       return;
     }
-
-    this.loading = true;
 
     const data = {
       nombre: this.form.value.nombre,
       direccion: this.form.value.direccion,
       telefono: this.form.value.telefono,
       email: this.form.value.emailEstablecimiento,
+      latitud: this.latitud,
+      longitud: this.longitud,
       responsable: {
         nombre: this.form.value.responsableNombre,
         email: this.form.value.responsableEmail,
@@ -135,11 +142,26 @@ export class RegistroEstablecimientoComponent {
 
     console.log('📦 Objeto listo para enviar:', data);
 
-    // Simulación del POST (más adelante conectamos con el backend)
-    // setTimeout(() => {
-    //   this.loading = false;
-    //   this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Establecimiento registrado correctamente.' });
-    //   this.router.navigate(['/login']);
-    // }, 2000);
+    this.establecimientosService.crearEstablecimiento(data).subscribe({
+      next: (response) => {
+        console.log('✅ Establecimiento creado:', response);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Establecimiento registrado correctamente.'
+        });
+        this.router.navigate(['/login']); // o donde quieras redirigir
+      },
+      error: (err) => {
+        console.error('❌ Error al crear establecimiento:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo registrar el establecimiento.'
+        });
+      }
+    });
+    
   }
 }
+

@@ -8,7 +8,12 @@ export interface IEstablecimiento {
   email?: string;
   latitud?: number;
   longitud?: number;
-  cursos?: (string | ICurso)[];        // IDs de cursos referenciados (ObjectId en backend)
-  createdAt?: string;       // timestamps automáticos de Mongoose
+  responsable?: {
+    nombre: string;
+    email: string;
+    password?: string; 
+  };
+  cursos?: (string | ICurso)[];        
+  createdAt?: string;       
   updatedAt?: string;
 }
