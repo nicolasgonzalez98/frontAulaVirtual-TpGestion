@@ -1,0 +1,159 @@
+<div class="container mx-auto p-6 max-w-4xl">
+  <p-toast></p-toast>
+
+  <div class="mb-6">
+    <h1 class="text-4xl font-bold text-gray-800">
+      {{ isEditMode ? 'Editar Usuario' : 'Nuevo Usuario' }}
+    </h1>
+    <p class="text-gray-600 mt-2">
+      {{ isEditMode ? 'Modifique los datos del usuario' : 'Complete el formulario para crear un nuevo usuario' }}
+    </p>
+  </div>
+
+  <p-card>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Nombre -->
+        <div class="flex flex-col gap-2">
+          <label for="nombre" class="font-semibold">
+            Nombre <span class="text-red-500">*</span>
+          </label>
+          <input 
+            pInputText 
+            id="nombre" 
+            formControlName="nombre"
+            placeholder="Ingrese el nombre"
+            [class.ng-invalid]="isFieldInvalid('nombre')"
+            [class.ng-dirty]="isFieldInvalid('nombre')" />
+          <small class="text-red-500" *ngIf="isFieldInvalid('nombre')">
+            {{ getFieldError('nombre') }}
+          </small>
+        </div>
+
+        <!-- Apellido -->
+        <div class="flex flex-col gap-2">
+          <label for="apellido" class="font-semibold">
+            Apellido <span class="text-red-500">*</span>
+          </label>
+          <input 
+            pInputText 
+            id="apellido" 
+            formControlName="apellido"
+            placeholder="Ingrese el apellido"
+            [class.ng-invalid]="isFieldInvalid('apellido')"
+            [class.ng-dirty]="isFieldInvalid('apellido')" />
+          <small class="text-red-500" *ngIf="isFieldInvalid('apellido')">
+            {{ getFieldError('apellido') }}
+          </small>
+        </div>
+
+        <!-- Email -->
+        <div class="flex flex-col gap-2">
+          <label for="email" class="font-semibold">
+            Email <span class="text-red-500">*</span>
+          </label>
+          <input 
+            pInputText 
+            id="email" 
+            formControlName="email"
+            type="email"
+            placeholder="ejemplo@correo.com"
+            [class.ng-invalid]="isFieldInvalid('email')"
+            [class.ng-dirty]="isFieldInvalid('email')" />
+          <small class="text-red-500" *ngIf="isFieldInvalid('email')">
+            {{ getFieldError('email') }}
+          </small>
+        </div>
+
+        <!-- DNI -->
+        <div class="flex flex-col gap-2">
+          <label for="dni" class="font-semibold">
+            DNI <span class="text-red-500">*</span>
+          </label>
+          <input 
+            pInputText 
+            id="dni" 
+            formControlName="dni"
+            placeholder="12345678"
+            maxlength="8"
+            [class.ng-invalid]="isFieldInvalid('dni')"
+            [class.ng-dirty]="isFieldInvalid('dni')" />
+          <small class="text-red-500" *ngIf="isFieldInvalid('dni')">
+            {{ getFieldError('dni') }}
+          </small>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="flex flex-col gap-2">
+          <label for="telefono" class="font-semibold">
+            Teléfono
+          </label>
+          <input 
+            pInputText 
+            id="telefono" 
+            formControlName="telefono"
+            placeholder="1234567890" />
+        </div>
+
+        <!-- Rol -->
+        <div class="flex flex-col gap-2">
+          <label for="rol" class="font-semibold">
+            Rol <span class="text-red-500">*</span>
+          </label>
+          <p-dropdown 
+            id="rol"
+            formControlName="rol"
+            [options]="roles"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Seleccione un rol"
+            [style]="{'width': '100%'}"
+            [class.ng-invalid]="isFieldInvalid('rol')"
+            [class.ng-dirty]="isFieldInvalid('rol')">
+          </p-dropdown>
+          <small class="text-red-500" *ngIf="isFieldInvalid('rol')">
+            {{ getFieldError('rol') }}
+          </small>
+        </div>
+
+        <!-- Estado Activo -->
+        <div class="flex flex-col gap-2 md:col-span-2">
+          <label for="activo" class="font-semibold">
+            Estado del Usuario
+          </label>
+          <div class="flex items-center gap-3">
+            <p-inputSwitch formControlName="activo" inputId="activo"></p-inputSwitch>
+            <span class="text-gray-700">
+              {{ userForm.get('activo')?.value ? 'Usuario Activo' : 'Usuario Inactivo' }}
+            </span>
+          </div>
+          <small class="text-gray-600">
+            Los usuarios inactivos no podrán acceder al sistema
+          </small>
+        </div>
+
+      </div>
+
+      <!-- Botones -->
+      <div class="flex gap-3 mt-8 justify-end">
+        <p-button 
+          label="Cancelar" 
+          icon="pi pi-times"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="onCancel()"
+          [disabled]="submitting">
+        </p-button>
+        <p-button 
+          [label]="isEditMode ? 'Actualizar' : 'Crear Usuario'" 
+          icon="pi pi-check"
+          type="submit"
+          [loading]="submitting"
+          [disabled]="loading || submitting">
+        </p-button>
+      </div>
+    </form>
+  </p-card>
+</div>
+

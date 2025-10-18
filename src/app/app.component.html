@@ -1,5 +1,31 @@
 <app-navbar *ngIf="showNavbar && isLoggedIn" /> 
 
+header class="bg-white shadow-md">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <i class="pi pi-qrcode text-3xl text-blue-600"></i>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-800">Sistema de Asistencias</h1>
+            <p class="text-sm text-gray-600">Panel de Administración</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-gray-600">
+            <i class="pi pi-user mr-2"></i>
+            Administrador
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
 <app-layout>
   
 </app-layout>
+
+<footer class="bg-white shadow-md mt-auto">
+    <div class="container mx-auto px-6 py-4 text-center text-gray-600">
+      <p>&copy; 2025 Sistema de Asistencias - Aula Virtual</p>
+    </div>
+</footer>
