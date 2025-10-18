@@ -1,6 +1,6 @@
-<div class="min-h-screen bg-gray-100">
-  <!-- Header -->
-  <header class="bg-white shadow-md">
+<app-navbar *ngIf="showNavbar && isLoggedIn" /> 
+
+header class="bg-white shadow-md">
     <div class="container mx-auto px-6 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -20,15 +20,12 @@
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="py-6">
-    <router-outlet />
-  </main>
+<app-layout>
+  
+</app-layout>
 
-  <!-- Footer -->
-  <footer class="bg-white shadow-md mt-auto">
+<footer class="bg-white shadow-md mt-auto">
     <div class="container mx-auto px-6 py-4 text-center text-gray-600">
       <p>&copy; 2025 Sistema de Asistencias - Aula Virtual</p>
     </div>
-  </footer>
-</div>
+</footer>
