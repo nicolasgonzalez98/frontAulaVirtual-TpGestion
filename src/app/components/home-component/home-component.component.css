@@ -1,0 +1,206 @@
+/* Estilos generales del Home */ 
+.home-container {
+    padding: 2rem;
+    background-color: #f4f7f9;
+    min-height: calc(100vh - 60px);
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 1.2rem;
+    color: #6c757d;
+  }
+  
+  /* --- Estilos para Dashboards --- */
+  
+  /* Contenedores de dashboards específicos */
+  .student-dashboard, .teacher-dashboard, .admin-dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Layout de 2 columnas */
+  .student-dashboard-content, .teacher-dashboard-content, .admin-dashboard-content {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .main-column {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .sidebar-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  /* Tarjetas de Dashboard (Estilo base) */
+  .dashboard-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Banners de Bienvenida */
+  .welcome-banner {
+    color: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+  }
+  
+  .welcome-banner h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: white;
+  }
+  
+  .welcome-banner p {
+    margin: 0;
+    font-size: 1.2rem;
+    opacity: 0.9;
+    color: white;
+  }
+  
+  /* Banner Alumno */
+  .student-dashboard .welcome-banner {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+  }
+  
+  /* Banner Docente */
+  .teacher-dashboard .welcome-banner {
+    background: linear-gradient(135deg, #28a745, #218838);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+  }
+  
+  /* Banner Admin */
+  .admin-dashboard .welcome-banner {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.25);
+  }
+  
+  /* Tarjetas de acción en la columna principal */
+  .main-column .dashboard-card a {
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .main-column .card-icon {
+    font-size: 2.5rem;
+    margin-right: 1.5rem;
+  }
+  
+  .main-column .card-text h2 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .main-column .card-text p {
+    margin: 0;
+    color: #6c757d;
+  }
+  
+  /* Colores de iconos de acciones */
+  .student-dashboard .primary-action .card-icon { color: #007bff; }
+  .student-dashboard .secondary-action .card-icon { color: #5a6268; }
+  .teacher-dashboard .teacher-primary-action .card-icon { color: #28a745; }
+  .teacher-dashboard .teacher-secondary-action .card-icon { color: #5a6268; }
+  .admin-dashboard .admin-primary-action .card-icon { color: #dc3545; }
+  .admin-dashboard .admin-secondary-action .card-icon { color: #5a6268; }
+  
+  /* Tarjetas en la columna lateral */
+  .sidebar-column .dashboard-card {
+    padding: 1.5rem;
+  }
+  
+  .sidebar-column .card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .sidebar-column .card-header i {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    color: #6c757d;
+  }
+  
+  .sidebar-column .card-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+  
+  .card-content p, .card-content li {
+    line-height: 1.6;
+  }
+  
+  /* Widgets específicos */
+  .progress-bar-container {
+    background-color: #e9ecef;
+    border-radius: 25px;
+    height: 10px;
+    margin-top: 1rem;
+  }
+  
+  .progress-bar {
+    background-color: #28a745;
+    height: 100%;
+    border-radius: 25px;
+  }
+  
+  .list-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .list-card li {
+    margin-bottom: 0.75rem;
+  }
+  
+  .list-card a {
+    text-decoration: none;
+    color: #0056b3;
+    transition: color 0.2s;
+  }
+  
+  .list-card a:hover {
+    color: #007bff;
+    text-decoration: underline;
+  }
+  
+  .list-card .view-all {
+    font-weight: 600;
+    color: #007bff;
+  }
+  
+  /* Responsividad */
+  @media (max-width: 992px) {
+    .student-dashboard-content, .teacher-dashboard-content, .admin-dashboard-content {
+      flex-direction: column;
+    }
+  }
+  

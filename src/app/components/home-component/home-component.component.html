@@ -1,0 +1,189 @@
+<div class="home-container">
+
+    @if (userSignal()) {
+      @switch (userSignal()?.rol?.toLowerCase()) {
+        
+        @case ('alumno') {
+          <div class="student-dashboard">
+            <div class="welcome-banner">
+              <h1>¡Hola, alumno: {{ userSignal()?.nombre }}!</h1>
+              <p>Qué bueno verte de nuevo. Aquí tienes un resumen de tu actividad.</p>
+            </div>
+            <div class="student-dashboard-content">
+              <div class="main-column">
+                <div class="dashboard-card primary-action">
+                  <a routerLink="/toma-asistencia">
+                    <div class="card-icon"><i class="pi pi-qrcode"></i></div>
+                    <div class="card-text">
+                      <h2>Tomar Asistencia</h2>
+                      <p>Escanea el QR de tu clase para marcar tu presente.</p>
+                    </div>
+                  </a>
+                </div>
+                <div class="dashboard-card secondary-action">
+                  <a routerLink="/mis-asistencias">
+                    <div class="card-icon"><i class="pi pi-history"></i></div>
+                    <div class="card-text">
+                      <h2>Mis Asistencias</h2>
+                      <p>Consulta tu historial completo de asistencias.</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="sidebar-column">
+                <div class="dashboard-card info-card">
+                  <div class="card-header">
+                    <i class="pi pi-clock"></i>
+                    <h3>Próxima Clase</h3>
+                  </div>
+                  <div class="card-content">
+                    <h4>Base de Datos</h4>
+                    <p>Aula 101 - 10:00 AM</p>
+                    <small>Profesor: Nahuelito</small>
+                  </div>
+                </div>
+                <div class="dashboard-card list-card">
+                  <div class="card-header">
+                    <i class="pi pi-book"></i>
+                    <h3>Mis Cursos</h3>
+                  </div>
+                  <ul class="course-list">
+                    <li><a href="#">Diseño de Software</a></li>
+                    <li><a href="#">Programación Orientada a Objetos</a></li>
+                    <li><a href="#">Bases de Datos I</a></li>
+                    <li><a href="#" class="view-all">Ver todos...</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+  
+        @case ('docente') {
+          <div class="teacher-dashboard">
+            <div class="welcome-banner teacher-banner">
+              <h1>Panel de Control del Docente</h1>
+              <p>Bienvenido, {{ userSignal()?.nombre }}. Gestiona tus clases y haz seguimiento de la asistencia.</p>
+            </div>
+            <div class="teacher-dashboard-content">
+              <div class="main-column">
+                <div class="dashboard-card teacher-primary-action">
+                  <a routerLink="/generar-qr">
+                    <div class="card-icon"><i class="pi pi-qrcode"></i></div>
+                    <div class="card-text">
+                      <h2>Generar QR de Asistencia</h2>
+                      <p>Inicia una clase y genera un código QR para tus alumnos.</p>
+                    </div>
+                  </a>
+                </div>
+                <div class="dashboard-card teacher-secondary-action">
+                  <a routerLink="/mis-cursos">
+                    <div class="card-icon"><i class="pi pi-book"></i></div>
+                    <div class="card-text">
+                      <h2>Gestionar Mis Cursos</h2>
+                      <p>Edita tus cursos, gestiona alumnos y planifica clases.</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="sidebar-column">
+                <div class="dashboard-card info-card">
+                  <div class="card-header">
+                    <i class="pi pi-users"></i>
+                    <h3>Asistencia en Vivo</h3>
+                  </div>
+                  <div class="card-content live-attendance">
+                    <h4>Base de datos I  - <strong>EN VIVO</strong></h4>
+                    <p>Presentes: <strong>28 / 35</strong></p>
+                    <div class="progress-bar-container">
+                      <div class="progress-bar" style="width: 80%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dashboard-card list-card">
+                  <div class="card-header">
+                    <i class="pi pi-chart-line"></i>
+                    <h3>Reportes de Asistencia</h3>
+                  </div>
+                  <ul class="report-list">
+                    <li><a href="#">Reporte Semanal - POO</a></li>
+                    <li><a href="#">Reporte Mensual - Base de Datos</a></li>
+                    <li><a href="#" class="view-all">Ver todos los reportes...</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+  
+        @case ('admin') {
+          <div class="admin-dashboard">
+            <div class="welcome-banner admin-banner">
+              <h1>Panel de Administración</h1>
+              <p>Bienvenido, {{ userSignal()?.nombre }}. Tienes control total sobre el sistema.</p>
+            </div>
+            <div class="admin-dashboard-content">
+              <div class="main-column">
+                <div class="dashboard-card admin-primary-action">
+                  <a routerLink="/admin/users">
+                    <div class="card-icon"><i class="pi pi-users"></i></div>
+                    <div class="card-text">
+                      <h2>Gestionar Usuarios</h2>
+                      <p>Crea, edita y administra los perfiles de todos los usuarios.</p>
+                    </div>
+                  </a>
+                </div>
+                <div class="dashboard-card admin-secondary-action">
+                  <a routerLink="/admin/establecimientos">
+                    <div class="card-icon"><i class="pi pi-building"></i></div>
+                    <div class="card-text">
+                      <h2>Gestionar Establecimiento</h2>
+                      <p>Administra tu establecimiento</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="sidebar-column">
+                <div class="dashboard-card info-card">
+                  <div class="card-header">
+                    <i class="pi pi-chart-bar"></i>
+                    <h3>Analíticas del Sistema</h3>
+                  </div>
+                  <div class="card-content system-analytics">
+                    <p>Usuarios Totales: <strong>1,250</strong></p>
+                    <p>Cursos Activos: <strong>78</strong></p>
+                    <p>Docentes Registrados: <strong>112</strong></p>
+                  </div>
+                </div>
+                <div class="dashboard-card list-card">
+                  <div class="card-header">
+                    <i class="pi pi-bell"></i>
+                    <h3>Actividad Reciente</h3>
+                  </div>
+                  <ul class="activity-list">
+                    <li>Nuevo registro: <strong>Juan Pérez (Docente)</strong></li>
+                    <li>Curso creado: <strong>POO</strong></li>
+                    <li>Pico de asistencia: <strong>350 usuarios activos</strong></li>
+                    <li><a href="#" class="view-all">Ver todo el log...</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+  
+        @default {
+          <div class="home-dashboard-container">
+            <h2>Rol no reconocido</h2>
+            <p>Tu rol de usuario ({{ userSignal()?.rol }}) no tiene una vista asignada.</p>
+          </div>
+        }
+      }
+    } @else {
+      <div class="loading-container">
+        <p>Cargando información del usuario...</p>
+      </div>
+    }
+  
+  </div>
+  

@@ -8,39 +8,47 @@ import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { RegistroEstablecimientoComponent } from './components/registro-establecimiento/registro-establecimiento.component';
 import { BeneficiosComponent } from './components/beneficios/beneficios.component';
+import { HomeComponent } from './components/home-component/home-component.component';
 
 export const routes: Routes = [
     {
         path: '',
         component: LayoutComponent,
         children: [
-            { path: 'register', component: RegisterComponent, canActivate: [GuestGuard]},
-            { path: 'login', component: LoginComponent, canActivate: [GuestGuard]},
-            { path: 'registro-establecimiento',component: RegistroEstablecimientoComponent, canActivate: [GuestGuard]},
-            { path: 'por-que-elegirnos', component:BeneficiosComponent, canActivate:[GuestGuard] },
+            { path: 'register', component: RegisterComponent, canActivate: [GuestGuard] },
+            { path: 'login', component: LoginComponent, canActivate: [GuestGuard] },
+            { path: 'registro-establecimiento', component: RegistroEstablecimientoComponent, canActivate: [GuestGuard] },
+            { path: 'por-que-elegirnos', component: BeneficiosComponent, canActivate: [GuestGuard] },
+            { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
             { 
               path: '', 
-              redirectTo: '/admin/users', 
+              redirectTo: '/home', 
               pathMatch: 'full' 
             },
             {
               path: 'admin/users',
               loadComponent: () => import('./components/admin/user-list/user-list.component')
-                .then(m => m.UserListComponent)
+                .then(m => m.UserListComponent),
+              canActivate: [AuthGuard, RoleGuard], // Protect with both guards
+              data: { roles: ['admin'] } // Specify the required role
             },
             {
               path: 'admin/users/new',
               loadComponent: () => import('./components/admin/user-form/user-form.component')
-                .then(m => m.UserFormComponent)
+                .then(m => m.UserFormComponent),
+              canActivate: [AuthGuard, RoleGuard], // Protect with both guards
+              data: { roles: ['admin'] } // Specify the required role
             },
             {
               path: 'admin/users/edit/:id',
               loadComponent: () => import('./components/admin/user-form/user-form.component')
-                .then(m => m.UserFormComponent)
+                .then(m => m.UserFormComponent),
+              canActivate: [AuthGuard, RoleGuard], // Protect with both guards
+              data: { roles: ['admin'] } // Specify the required role
             },
             {
               path: '**',
-              redirectTo: '/admin/users'
+              redirectTo: '/home'
             }
         ]
     }
