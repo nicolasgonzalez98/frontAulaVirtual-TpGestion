@@ -46,6 +46,7 @@ export class RegistroEstablecimientoComponent implements AfterViewInit {
       telefono: [''],
       emailEstablecimiento: ['', [Validators.required, Validators.email]],
       responsableNombre: ['', Validators.required],
+      responsableApellido: ['', Validators.required],
       responsableEmail: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
@@ -98,6 +99,11 @@ export class RegistroEstablecimientoComponent implements AfterViewInit {
     });
   }
 
+  isInvalid(controlName: string): boolean {
+    const control = this.form.get(controlName);
+    return !!(control && control.touched && control.invalid);
+  }
+
   onSubmit() {
     if (!this.direccionValida) {
       this.messageService.add({
@@ -135,6 +141,7 @@ export class RegistroEstablecimientoComponent implements AfterViewInit {
       longitud: this.longitud,
       responsable: {
         nombre: this.form.value.responsableNombre,
+        apellido: this.form.value.responsableApellido,
         email: this.form.value.responsableEmail,
         password: this.form.value.password
       }
