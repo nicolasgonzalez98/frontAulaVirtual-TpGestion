@@ -39,6 +39,12 @@ export const routes: Routes = [
                 .then(m => m.UserFormComponent)
             },
             {
+              path: 'clases/:idClase/qr',
+              loadComponent: () => import('./pages/asistencia-qr/asistencia-qr.component')
+                .then(m => m.AsistenciaQrComponent),
+              canActivate: [AuthGuard] // opcional: agregar RoleGuard
+            },
+            {
               path: '**',
               redirectTo: '/admin/users'
             }
