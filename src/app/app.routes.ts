@@ -42,7 +42,7 @@ export const routes: Routes = [
               path: 'clases/:idClase/qr',
               loadComponent: () => import('./pages/asistencia-qr/asistencia-qr.component')
                 .then(m => m.AsistenciaQrComponent),
-              canActivate: [AuthGuard] // opcional: agregar RoleGuard
+               // opcional: agregar RoleGuard
             },
             {
               path: '**',

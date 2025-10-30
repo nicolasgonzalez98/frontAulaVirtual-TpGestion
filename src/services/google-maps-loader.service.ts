@@ -31,7 +31,6 @@ export class GoogleMapsLoaderService {
     };
 
     script.onerror = () => {
-      console.error('❌ Error al cargar Google Maps API.');
       this.loading = false;
     };
 

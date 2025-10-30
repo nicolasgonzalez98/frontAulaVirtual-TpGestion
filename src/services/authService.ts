@@ -3,13 +3,14 @@ import axios from 'axios';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { IUsuario } from '../app/models/usuario.models';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthService {
-    private apiUrl = 'http://localhost:3000/api/auth';
+    private apiUrl = environment.api_url_dev+'/auth';
 
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
     private userSubject = new BehaviorSubject<IUsuario | null>(this.getUserFromStorage());

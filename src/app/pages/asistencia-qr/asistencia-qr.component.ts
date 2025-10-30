@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-asistencia-qr',
@@ -20,7 +21,7 @@ export class AsistenciaQrComponent implements OnInit {
     this.idClase = this.idClase || this.route.snapshot.paramMap.get('idClase') || '';
 
     // URL que los alumnos escanearán (ajustala según tu dominio real)
-    this.qrData = `https://tu-frontend.com/asistencia/registrar/${this.idClase}`;
+    this.qrData = environment.api_url_dev+`/asistencias/`;
   }
 }
 

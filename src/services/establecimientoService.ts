@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IEstablecimiento } from '../app/models/establecimiento.models';
+import { environment } from '../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class EstablecimientosService {
-  private apiUrl = 'http://localhost:3000/api/establecimientos'; // Ajustá según tu backend
+  private apiUrl = environment.api_url_dev+'/establecimientos'; // Ajustá según tu backend
 
   constructor(private http: HttpClient) {}
 
