@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import axios from 'axios';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { IUsuario } from '../app/models/usuario.models';
 import { environment } from '../environments/environment';
+import { AxiosAuthService } from './axiosAuthService';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class AuthService {
     isLoggedIn$ = this.isLoggedInSubject.asObservable();
     user$ = this.userSubject.asObservable();
 
-    constructor(private router:Router) {}
+    constructor(private router:Router, private injector: Injector) {}
 
     public isLoggedIn(): boolean {
         const token = localStorage.getItem('token');
@@ -41,7 +42,8 @@ export class AuthService {
 
     async login(data: { email: string; password: string }): Promise<{ message: string; token: string; user: IUsuario }> {
         try {
-                const response = await axios.post(`${this.apiUrl}/login`, data);
+                const axiosAuth = this.injector.get(AxiosAuthService);
+                const response = await axiosAuth.client.post(`/auth/login`, data);
 
                 const user: IUsuario = response.data.user;
 
