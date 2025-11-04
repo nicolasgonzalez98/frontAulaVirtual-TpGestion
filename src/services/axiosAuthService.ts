@@ -33,9 +33,12 @@ export class AxiosAuthService {
       response => response,
       error => {
         if (error.response && error.response.status === 401) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          window.location.href = '/login';
+          const token = localStorage.getItem('token');
+          console.log(token)
+          console.warn('⚠️ Token inválido o no proporcionado:', error.response.data);
+          // localStorage.removeItem('token');
+          // localStorage.removeItem('user');
+          // window.location.href = '/login';
         }
         return Promise.reject(error);
       }

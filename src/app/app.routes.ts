@@ -8,6 +8,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
 import { RegistroEstablecimientoComponent } from './components/registro-establecimiento/registro-establecimiento.component';
 import { BeneficiosComponent } from './components/beneficios/beneficios.component';
+import { AsistenciaRegistroComponent } from './components/asistencia-registro/asistencia-registro.component';
 
 export const routes: Routes = [
     {
@@ -39,10 +40,15 @@ export const routes: Routes = [
                 .then(m => m.UserFormComponent)
             },
             {
-              path: 'clases/:idClase/qr',
+              path: 'clases/:cursoId/:idClase/qr',
               loadComponent: () => import('./pages/asistencia-qr/asistencia-qr.component')
                 .then(m => m.AsistenciaQrComponent),
                // opcional: agregar RoleGuard
+            },
+            { 
+              path: 'asistencia/:cursoId/:claseId',
+              loadComponent: () => import('./components/asistencia-registro/asistencia-registro.component')
+                .then(m => m.AsistenciaRegistroComponent)
             },
             {
               path: '**',
