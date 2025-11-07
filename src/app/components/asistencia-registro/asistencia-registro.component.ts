@@ -46,6 +46,7 @@ export class AsistenciaRegistroComponent implements OnInit {
         const position = await this.getCurrentPosition({ timeout: 10000 });
         body.latitude = position.coords.latitude;
         body.longitude = position.coords.longitude;
+        body.geo = true
       }
 
       const response = await this.axiosAuth.client.post(
@@ -56,10 +57,9 @@ export class AsistenciaRegistroComponent implements OnInit {
       this.resultado = response.data.message || 'Asistencia registrada correctamente';
       this.messageService.add({ severity: 'success', summary: 'Éxito', detail: this.resultado });
     } catch (err: any) {
-      console.error('Error en registro de asistencia:', err);
 
       if (err && err.code !== undefined) {
-        let msg = 'No se pudo obtener ubicación. Por favor habilitá la ubicación en tu navegador.';
+        let msg = err.response.data.message;
         if (err.code === 1) msg = 'Permiso denegado para acceder a la ubicación.';
         if (err.code === 2) msg = 'No se pudo determinar la ubicación.';
         if (err.code === 3) msg = 'Tiempo de espera agotado al obtener ubicación.';
