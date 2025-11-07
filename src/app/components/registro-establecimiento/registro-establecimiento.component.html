@@ -23,11 +23,17 @@
       <div class="mb-4">
         <label class="block font-semibold mb-2">Nombre del Establecimiento</label>
         <input pInputText formControlName="nombre" class="w-full" />
+        <small *ngIf="isInvalid('nombre')" class="text-red-600">
+          El nombre del establecimiento es requerido.
+        </small>
       </div>
 
       <div class="mb-4">
         <label class="block font-semibold mb-2">Dirección</label>
         <input #direccionInput pInputText formControlName="direccion" class="w-full" placeholder="Ej: Av. Rivadavia 1234, Buenos Aires" />
+        <small *ngIf="isInvalid('direccion')" class="text-red-600">
+          La direccion es requerida.
+        </small>
       </div>
 
       <div *ngIf="direccionValida" class="text-green-600 text-sm mb-4">
@@ -42,16 +48,37 @@
       <div class="mb-4">
         <label class="block font-semibold mb-2">Email del Establecimiento</label>
         <input pInputText formControlName="emailEstablecimiento" class="w-full" />
+        <small *ngIf="isInvalid('emailEstablecimiento')" class="text-red-600">
+          Ingresá un email válido.
+        </small>
       </div>
 
       <div class="mb-4">
         <label class="block font-semibold mb-2">Nombre del Responsable</label>
         <input pInputText formControlName="responsableNombre" class="w-full" />
+        <small *ngIf="isInvalid('responsableNombre')" class="text-red-600">
+          El nombre es requerido.
+        </small>
       </div>
+
+      <div class="mb-4">
+        <label class="block font-semibold mb-2">Apellido del Responsable</label>
+        <input pInputText formControlName="responsableApellido" class="w-full" />
+        <small *ngIf="isInvalid('responsableApellido')" class="text-red-600">
+          El apellido es requerido.
+        </small>
+      </div>
+
 
       <div class="mb-4">
         <label class="block font-semibold mb-2">Email del Responsable</label>
         <input pInputText formControlName="responsableEmail" class="w-full" />
+        <small *ngIf="form.get('responsableEmail')?.touched && form.get('responsableEmail')?.hasError('required')" class="text-red-600">
+          El email es requerido.
+        </small>
+        <small *ngIf="form.get('responsableEmail')?.touched && form.get('responsableEmail')?.hasError('email')" class="text-red-600">
+          Ingresá un email válido.
+        </small>
       </div>
 
       <div class="mb-4">

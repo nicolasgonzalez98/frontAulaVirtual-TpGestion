@@ -1,0 +1,19 @@
+<p-toast></p-toast>
+
+<div class="flex flex-col items-center justify-center min-h-screen">
+  <div *ngIf="loading" class="text-gray-500 text-lg">Registrando asistencia...</div>
+
+  <div *ngIf="!loading">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-700">
+      {{ resultado }}
+    </h2>
+
+    <button 
+      (click)="goHome()" 
+      class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+    >
+      Volver al inicio
+    </button>
+  </div>
+</div>
+
