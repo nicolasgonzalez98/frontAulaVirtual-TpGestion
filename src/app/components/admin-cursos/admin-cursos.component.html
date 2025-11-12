@@ -1,0 +1,210 @@
+<div class="home-container">
+  <div class="admin-dashboard">
+    <div class="welcome-banner admin-banner">
+      <h1>Gestión de Cursos</h1>
+      <p>Administra todos los cursos del sistema</p>
+    </div>
+
+    @if (errorMessage) {
+      <div class="dashboard-card" style="background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; margin-bottom: 1rem;">
+        <div style="padding: 1rem;">{{ errorMessage }}</div>
+      </div>
+    }
+
+    <div class="admin-dashboard-content">
+      <div class="main-column">
+        <!-- Search and Create Section -->
+        <div class="dashboard-card">
+          <div style="padding: 1.5rem;">
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+              <input 
+                type="text" 
+                [(ngModel)]="searchQuery" 
+                placeholder="Buscar cursos..."
+                style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+              <button 
+                (click)="onSearch()" 
+                style="padding: 0.5rem 1rem; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                <i class="pi pi-search"></i> Buscar
+              </button>
+              <button 
+                (click)="showCreateForm()" 
+                style="padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                <i class="pi pi-plus"></i> Nuevo Curso
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Section -->
+        @if (showForm) {
+          <div class="dashboard-card">
+            <div style="padding: 2rem;">
+              <h3>{{ isEditing ? 'Editar Curso' : 'Crear Nuevo Curso' }}</h3>
+              <form (ngSubmit)="submitForm()" style="display: grid; gap: 1rem;">
+                <div>
+                  <label>Nombre *</label>
+                  <input type="text" [(ngModel)]="cursoForm.nombre" name="nombre" required
+                         style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div>
+                    <label>Código</label>
+                    <input type="text" [(ngModel)]="cursoForm.codigo" name="codigo"
+                           style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                  </div>
+                  <div>
+                    <label>Año</label>
+                    <input type="number" [(ngModel)]="cursoForm.anio" name="anio"
+                           style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                  </div>
+                </div>
+
+                <div>
+                  <label>Descripción</label>
+                  <textarea [(ngModel)]="cursoForm.descripcion" name="descripcion" rows="3"
+                            style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+                </div>
+
+                <div>
+                  <label>Establecimiento ID *</label>
+                  <input type="text" [(ngModel)]="cursoForm.establecimiento" name="establecimiento" required
+                         style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+
+                <div>
+                  <label>Docentes (separados por comas)</label>
+                  <input type="text" [(ngModel)]="docentesInput" name="docentesInput"
+                         placeholder="ID1, ID2, ID3..."
+                         style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+
+                <div>
+                  <label>Modalidad de Clases *</label>
+                  <select [(ngModel)]="cursoForm.modalidadClases" name="modalidadClases" required
+                          style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="fechas_preestablecidas">Fechas Preestablecidas</option>
+                    <option value="clases_diarias">Clases Diarias</option>
+                  </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                  <div>
+                    <label>Fecha Inicio</label>
+                    <input type="date" [(ngModel)]="cursoForm.fechaInicio" name="fechaInicio"
+                           style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                  </div>
+                  <div>
+                    <label>Fecha Fin</label>
+                    <input type="date" [(ngModel)]="cursoForm.fechaFin" name="fechaFin"
+                           style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                  </div>
+                  <div>
+                    <label>Duración por Día (horas)</label>
+                    <input type="number" [(ngModel)]="cursoForm.duracionPorDiaHoras" name="duracionPorDiaHoras"
+                           style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                  <button type="button" (click)="cancelForm()"
+                          style="padding: 0.5rem 1rem; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Cancelar
+                  </button>
+                  <button type="submit" [disabled]="loading"
+                          style="padding: 0.5rem 1rem; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    {{ isEditing ? 'Actualizar' : 'Crear' }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        }
+
+        <!-- Courses List -->
+        @if (loading) {
+          <div class="loading-container">
+            <p>Cargando cursos...</p>
+          </div>
+        } @else {
+          @for (curso of cursos; track curso._id) {
+            <div class="dashboard-card">
+              <div style="padding: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                  <div style="flex: 1;">
+                    <h3 style="margin: 0 0 0.5rem 0; color: #dc3545;">{{ curso.nombre }}</h3>
+                    <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
+                      <strong>Código:</strong> {{ curso.codigo || 'N/A' }} | 
+                      <strong>Año:</strong> {{ curso.anio || 'N/A' }}
+                    </p>
+                    @if (curso.descripcion) {
+                      <p style="margin: 0 0 0.5rem 0;">{{ curso.descripcion }}</p>
+                    }
+                    <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
+                      <strong>Modalidad:</strong> {{ curso.modalidadClases === 'fechas_preestablecidas' ? 'Fechas Preestablecidas' : 'Clases Diarias' }}
+                    </p>
+                    @if (curso.fechaInicio && curso.fechaFin) {
+                      <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
+                        <strong>Período:</strong> {{ curso.fechaInicio }} - {{ curso.fechaFin }}
+                      </p>
+                    }
+                    @if (curso.docentes && curso.docentes.length > 0) {
+                      <p style="margin: 0; color: #6c757d;">
+                        <strong>Docentes:</strong> {{ curso.docentes.length }} asignado(s)
+                      </p>
+                    }
+                  </div>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <button (click)="showEditForm(curso)"
+                            style="padding: 0.5rem; background: #ffc107; color: #212529; border: none; border-radius: 4px; cursor: pointer;">
+                      <i class="pi pi-pencil"></i>
+                    </button>
+                    <button (click)="confirmDelete(curso)"
+                            style="padding: 0.5rem; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                      <i class="pi pi-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          } @empty {
+            <div class="dashboard-card">
+              <div style="padding: 2rem; text-align: center; color: #6c757d;">
+                <i class="pi pi-book" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <p>No se encontraron cursos</p>
+              </div>
+            </div>
+          }
+        }
+      </div>
+
+      <div class="sidebar-column">
+        <div class="dashboard-card info-card">
+          <div class="card-header">
+            <i class="pi pi-chart-bar"></i>
+            <h3>Estadísticas</h3>
+          </div>
+          <div class="card-content">
+            <p>Total de Cursos: <strong>{{ cursos.length }}</strong></p>
+            <p>Cursos Activos: <strong>{{ cursosActivos }}</strong></p>
+          </div>
+        </div>
+
+        <div class="dashboard-card list-card">
+          <div class="card-header">
+            <i class="pi pi-info-circle"></i>
+            <h3>Información</h3>
+          </div>
+          <div class="card-content">
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="margin-bottom: 0.5rem;">• Todos los campos marcados con * son obligatorios</li>
+              <li style="margin-bottom: 0.5rem;">• Los docentes se ingresan como IDs separados por comas</li>
+              <li style="margin-bottom: 0.5rem;">• El ID del establecimiento debe existir en el sistema</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

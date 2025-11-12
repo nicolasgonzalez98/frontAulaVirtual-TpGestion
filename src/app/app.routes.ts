@@ -48,6 +48,19 @@ export const routes: Routes = [
               data: { roles: ['admin'] } // Specify the required role
             },
             {
+              path: 'admin/cursos',
+              loadComponent: () => import('./components/admin-cursos/admin-cursos.component')
+                .then(m => m.AdminCursosComponent),
+              canActivate: [AuthGuard, RoleGuard],
+              data: { roles: ['admin'] }
+            },
+            {
+              path: 'mis-cursos',
+              loadComponent: () => import('./components/mis-cursos/mis-cursos.component')
+                .then(m => m.MisCursosComponent),
+              canActivate: [AuthGuard]
+            },
+            {
               path: 'clases/:cursoId/:idClase/qr',
               loadComponent: () => import('./pages/asistencia-qr/asistencia-qr.component')
                 .then(m => m.AsistenciaQrComponent),
