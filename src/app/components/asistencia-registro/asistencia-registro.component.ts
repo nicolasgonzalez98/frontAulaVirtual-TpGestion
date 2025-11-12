@@ -31,7 +31,8 @@ export class AsistenciaRegistroComponent implements OnInit {
 
     // 👇 agregamos esto
     const geoRequired = this.route.snapshot.queryParamMap.get('geo') === 'true';
-
+    const token = this.route.snapshot.queryParamMap.get('token'); // para modo noGeo
+    console.log('Geo required:', geoRequired);
     if (!this.cursoId || !this.claseId) {
       this.resultado = 'Error: datos inválidos en el enlace QR';
       this.loading = false;
@@ -47,6 +48,9 @@ export class AsistenciaRegistroComponent implements OnInit {
         body.latitude = position.coords.latitude;
         body.longitude = position.coords.longitude;
         body.geo = true
+      }else{
+        body.geo = false
+        body.token = token;
       }
 
       const response = await this.axiosAuth.client.post(
