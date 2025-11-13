@@ -84,6 +84,42 @@
           </small>
         </div>
 
+        <!-- Contraseña -->
+        <div class="flex flex-col gap-2" *ngIf="!isEditMode">
+          <label for="password" class="font-semibold">
+            Contraseña <span class="text-red-500">*</span>
+          </label>
+          <input 
+            pInputText 
+            id="password" 
+            type="password"
+            formControlName="password"
+            placeholder="Mínimo 8 caracteres"
+            [class.ng-invalid]="isFieldInvalid('password')"
+            [class.ng-dirty]="isFieldInvalid('password')" />
+          <small class="text-red-500" *ngIf="isFieldInvalid('password')">
+            {{ getFieldError('password') }}
+          </small>
+        </div>
+
+        <!-- Confirmar Contraseña -->
+        <div class="flex flex-col gap-2" *ngIf="!isEditMode">
+          <label for="confirmPassword" class="font-semibold">
+            Confirmar contraseña <span class="text-red-500">*</span>
+          </label>
+          <input 
+            pInputText 
+            id="confirmPassword" 
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="Repita la contraseña"
+            [class.ng-invalid]="isFieldInvalid('confirmPassword') || (userForm.errors?.['passwordsMismatch'] && userForm.get('confirmPassword')?.touched)"
+            [class.ng-dirty]="isFieldInvalid('confirmPassword') || (userForm.errors?.['passwordsMismatch'] && userForm.get('confirmPassword')?.touched)" />
+          <small class="text-red-500" *ngIf="isFieldInvalid('confirmPassword') || (userForm.errors?.['passwordsMismatch'] && userForm.get('confirmPassword')?.touched)">
+            {{ getFieldError('confirmPassword') }}
+          </small>
+        </div>
+
         <!-- Teléfono -->
         <div class="flex flex-col gap-2">
           <label for="telefono" class="font-semibold">

@@ -18,5 +18,7 @@ export interface UserForm {
   rol: string;
   activo: boolean;
   telefono?: string;
+  password?: string;
+  confirmPassword?: string;
 }
 
