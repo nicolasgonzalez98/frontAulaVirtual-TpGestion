@@ -6,7 +6,7 @@ import { User, UserForm } from '../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/api/usuarios'; // api backend?
+  private apiUrl = 'http://localhost:3000/api'; // api backend?
 
   async getUsers(): Promise<User[]> {
     try {
