@@ -66,24 +66,6 @@
           </small>
         </div>
 
-        <!-- DNI -->
-        <div class="flex flex-col gap-2">
-          <label for="dni" class="font-semibold">
-            DNI <span class="text-red-500">*</span>
-          </label>
-          <input 
-            pInputText 
-            id="dni" 
-            formControlName="dni"
-            placeholder="12345678"
-            maxlength="8"
-            [class.ng-invalid]="isFieldInvalid('dni')"
-            [class.ng-dirty]="isFieldInvalid('dni')" />
-          <small class="text-red-500" *ngIf="isFieldInvalid('dni')">
-            {{ getFieldError('dni') }}
-          </small>
-        </div>
-
         <!-- Contraseña -->
         <div class="flex flex-col gap-2" *ngIf="!isEditMode">
           <label for="password" class="font-semibold">
@@ -120,18 +102,6 @@
           </small>
         </div>
 
-        <!-- Teléfono -->
-        <div class="flex flex-col gap-2">
-          <label for="telefono" class="font-semibold">
-            Teléfono
-          </label>
-          <input 
-            pInputText 
-            id="telefono" 
-            formControlName="telefono"
-            placeholder="1234567890" />
-        </div>
-
         <!-- Rol -->
         <div class="flex flex-col gap-2">
           <label for="rol" class="font-semibold">
@@ -150,22 +120,6 @@
           </p-dropdown>
           <small class="text-red-500" *ngIf="isFieldInvalid('rol')">
             {{ getFieldError('rol') }}
-          </small>
-        </div>
-
-        <!-- Estado Activo -->
-        <div class="flex flex-col gap-2 md:col-span-2">
-          <label for="activo" class="font-semibold">
-            Estado del Usuario
-          </label>
-          <div class="flex items-center gap-3">
-            <p-inputSwitch formControlName="activo" inputId="activo"></p-inputSwitch>
-            <span class="text-gray-700">
-              {{ userForm.get('activo')?.value ? 'Usuario Activo' : 'Usuario Inactivo' }}
-            </span>
-          </div>
-          <small class="text-gray-600">
-            Los usuarios inactivos no podrán acceder al sistema
           </small>
         </div>
 

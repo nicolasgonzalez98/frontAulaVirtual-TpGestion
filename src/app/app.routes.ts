@@ -27,25 +27,25 @@ export const routes: Routes = [
               pathMatch: 'full' 
             },
             {
-              path: 'admin/users',
+              path: 'admin/usuarios',
               loadComponent: () => import('./components/admin/user-list/user-list.component')
                 .then(m => m.UserListComponent),
-              canActivate: [AuthGuard, RoleGuard], // Protect with both guards
-              data: { roles: ['admin'] } // Specify the required role
+              canActivate: [AuthGuard, RoleGuard],
+              data: { roles: ['admin'] }
             },
             {
-              path: 'admin/users/new',
+              path: 'admin/usuarios/nuevo',
               loadComponent: () => import('./components/admin/user-form/user-form.component')
                 .then(m => m.UserFormComponent),
-              canActivate: [AuthGuard, RoleGuard], // Protect with both guards
-              data: { roles: ['admin'] } // Specify the required role
+              canActivate: [AuthGuard, RoleGuard],
+              data: { roles: ['admin'] }
             },
             {
-              path: 'admin/users/edit/:id',
+              path: 'admin/usuarios/editar/:id',
               loadComponent: () => import('./components/admin/user-form/user-form.component')
                 .then(m => m.UserFormComponent),
-              canActivate: [AuthGuard, RoleGuard], // Protect with both guards
-              data: { roles: ['admin'] } // Specify the required role
+              canActivate: [AuthGuard, RoleGuard],
+              data: { roles: ['admin'] }
             },
             {
               path: 'clases/:cursoId/:idClase/qr',
