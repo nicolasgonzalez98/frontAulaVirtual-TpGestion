@@ -13,35 +13,59 @@ export class AsistenciaQrComponent implements OnInit {
   @Input() cursoId?: string; // Si lo pasás desde otro componente
   @Input() idClase?: string;
   qrData: string = '';
+  modo: 'geo' | 'noGeo' = 'geo';
+  intervalId?: any;
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    // Si viene por parámetro de la ruta
+    // obtener ids desde ruta si no vienen como @Input
     this.cursoId = this.cursoId || this.route.snapshot.paramMap.get('cursoId') || '';
     this.idClase = this.idClase || this.route.snapshot.paramMap.get('idClase') || '';
 
-    // URL que los alumnos escanearán (ajustala según tu dominio real)
-    this.qrData = `http://localhost:4200/asistencia/${this.cursoId}/${this.idClase}`;
-
-    // ✅ 2 versiones de QR
-    const urlConGeo = `${this.qrData}?geo=true`; // QR impreso (valida ubicación)
-    const urlSinGeo = `${this.qrData}?geo=false`; // QR mostrado en pantalla
-
-    // Por defecto mostramos el QR impreso (para imprimir)
-    this.qrData = urlConGeo;
+    // Por defecto mostramos el QR impreso (valida ubicación)
+    this.setQrGeo('geo');
   }
 
   // Método para alternar tipo de QR (opcional)
   setQrGeo(modo: 'geo' | 'noGeo') {
+    this.modo = modo;
+
+    // detener rotación previa si existía
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = undefined;
+    }
+
     const baseUrl = `http://localhost:4200/asistencia/${this.cursoId}/${this.idClase}`;
-    this.qrData = modo === 'geo'
-      ? `${baseUrl}?geo=true`
-      : `${baseUrl}?geo=false`;
+
+    if (modo === 'geo') {
+      // QR fijo con geolocalización
+      this.qrData = `${baseUrl}?geo=true`;
+    } else {
+      // QR que cambia cada 30 segundos
+      this.actualizarQrNoGeo(baseUrl);
+      this.intervalId = setInterval(() => {this.actualizarQrNoGeo(baseUrl), console.log("cambie qr")}, 30000);
+    }
+  }
+
+  private actualizarQrNoGeo(baseUrl: string) {
+    const token = this.generarToken();
+    this.qrData = `${baseUrl}?geo=false&token=${token}`;
+  }
+
+  private generarToken(): string {
+    const timestamp = Math.floor(Date.now() / 1000);
+    const random = Math.random().toString(36).substring(2, 8);
+    return `${timestamp}-${random}`;
   }
 
   printQR() {
     window.print();
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 }
 
