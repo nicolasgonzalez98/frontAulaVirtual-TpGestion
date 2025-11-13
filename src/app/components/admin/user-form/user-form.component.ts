@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
-import { InputSwitchModule } from 'primeng/inputswitch';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { UserService } from '../../../services/user.service';
-import { User } from '../../../models/user.model';
+import { User, UserForm } from '../../../models/user.model';
 
 @Component({
   selector: 'app-user-form',
@@ -21,7 +20,6 @@ import { User } from '../../../models/user.model';
     CardModule,
     InputTextModule,
     DropdownModule,
-    InputSwitchModule,
     ButtonModule,
     ToastModule
   ],
@@ -36,14 +34,15 @@ import { User } from '../../../models/user.model';
 export class UserFormComponent implements OnInit {
   userForm: FormGroup;
   isEditMode = false;
-  userId: number | null = null;
+  userId: string | null = null;
   loading = false;
   submitting = false;
 
   roles = [
-    { label: 'Estudiante', value: 'ESTUDIANTE' },
-    { label: 'Profesor', value: 'PROFESOR' },
-    { label: 'Administrador', value: 'ADMIN' }
+    { label: 'Estudiante', value: 'alumno' },
+    { label: 'Profesor', value: 'docente' },
+    { label: 'Administrador', value: 'admin' },
+    { label: 'Super Administrador', value: 'superadmin' }
   ];
 
   constructor(
@@ -53,38 +52,40 @@ export class UserFormComponent implements OnInit {
     private route: ActivatedRoute,
     private messageService: MessageService
   ) {
-    this.userForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
-      apellido: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      dni: ['', [Validators.required, Validators.pattern(/^\d{7,8}$/)]],
-      telefono: [''],
-      rol: ['ESTUDIANTE', Validators.required],
-      activo: [true]
-    });
+    this.userForm = this.fb.group(
+      {
+        nombre: ['', [Validators.required, Validators.minLength(2)]],
+        apellido: ['', [Validators.required, Validators.minLength(2)]],
+        email: ['', [Validators.required, Validators.email]],
+        rol: ['admin', Validators.required],
+        password: [''],
+        confirmPassword: ['']
+      },
+      { validators: this.passwordsMatchValidator }
+    );
   }
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode = true;
-      this.userId = parseInt(id);
+      this.userId = id;
+      this.setPasswordValidators(false);
       await this.loadUser(this.userId);
+    } else {
+      this.setPasswordValidators(true);
     }
   }
 
-  async loadUser(id: number) {
+  async loadUser(id: string) {
     try {
       this.loading = true;
-      const user = await this.userService.getUserById(id);
+      const user: User = await this.userService.getUserById(id);
       this.userForm.patchValue({
         nombre: user.nombre,
         apellido: user.apellido,
         email: user.email,
-        dni: user.dni,
-        telefono: user.telefono || '',
-        rol: user.rol,
-        activo: user.activo
+        rol: (user.rol ?? '').toLowerCase()
       });
     } catch (error) {
       this.messageService.add({
@@ -92,7 +93,7 @@ export class UserFormComponent implements OnInit {
         summary: 'Error',
         detail: 'No se pudo cargar el usuario'
       });
-      this.router.navigate(['/admin/users']);
+      this.router.navigate(['/admin/usuarios']);
     } finally {
       this.loading = false;
     }
@@ -102,7 +103,13 @@ export class UserFormComponent implements OnInit {
     if (this.userForm.valid) {
       try {
         this.submitting = true;
-        const formData = this.userForm.value;
+        const { confirmPassword, ...rawData } = this.userForm.value;
+        const formData = { ...rawData } as UserForm;
+
+        if (!formData.password) {
+          delete formData.password;
+        }
+        formData.rol = formData.rol?.toString().toLowerCase();
 
         if (this.isEditMode && this.userId) {
           await this.userService.updateUser(this.userId, formData);
@@ -121,7 +128,7 @@ export class UserFormComponent implements OnInit {
         }
 
         setTimeout(() => {
-          this.router.navigate(['/admin/users']);
+          this.router.navigate(['/admin/usuarios']);
         }, 1500);
       } catch (error) {
         this.messageService.add({
@@ -144,8 +151,35 @@ export class UserFormComponent implements OnInit {
     }
   }
 
+  private setPasswordValidators(isRequired: boolean) {
+    const passwordControl = this.userForm.get('password');
+    const confirmPasswordControl = this.userForm.get('confirmPassword');
+
+    if (isRequired) {
+      passwordControl?.setValidators([Validators.required, Validators.minLength(8)]);
+      confirmPasswordControl?.setValidators([Validators.required]);
+    } else {
+      passwordControl?.clearValidators();
+      confirmPasswordControl?.clearValidators();
+    }
+
+    passwordControl?.updateValueAndValidity();
+    confirmPasswordControl?.updateValueAndValidity();
+  }
+
+  private passwordsMatchValidator(group: FormGroup): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const confirm = group.get('confirmPassword')?.value;
+
+    if (!password && !confirm) {
+      return null;
+    }
+
+    return password === confirm ? null : { passwordsMismatch: true };
+  }
+
   onCancel() {
-    this.router.navigate(['/admin/users']);
+    this.router.navigate(['/admin/usuarios']);
   }
 
   isFieldInvalid(fieldName: string): boolean {
@@ -159,7 +193,9 @@ export class UserFormComponent implements OnInit {
       if (field.errors['required']) return 'Este campo es requerido';
       if (field.errors['email']) return 'Email inválido';
       if (field.errors['minlength']) return `Mínimo ${field.errors['minlength'].requiredLength} caracteres`;
-      if (field.errors['pattern']) return 'DNI debe tener 7 u 8 dígitos';
+    }
+    if (fieldName === 'confirmPassword' && this.userForm.errors?.['passwordsMismatch']) {
+      return 'Las contraseñas no coinciden';
     }
     return '';
   }

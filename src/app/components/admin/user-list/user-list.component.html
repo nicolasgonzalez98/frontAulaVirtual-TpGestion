@@ -40,8 +40,8 @@
 
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="id" style="width: 5%">
-            ID <p-sortIcon field="id"></p-sortIcon>
+          <th pSortableColumn="_id" style="width: 5%">
+            ID <p-sortIcon field="_id"></p-sortIcon>
           </th>
           <th pSortableColumn="nombre" style="width: 20%">
             Nombre <p-sortIcon field="nombre"></p-sortIcon>
@@ -64,7 +64,7 @@
       
       <ng-template pTemplate="body" let-user>
         <tr>
-          <td>{{ user.id }}</td>
+          <td>{{ user._id }}</td>
           <td class="font-semibold">{{ user.nombre }} {{ user.apellido }}</td>
           <td>
             <i class="pi pi-envelope mr-2 text-gray-500"></i>
@@ -73,7 +73,7 @@
           <td>{{ user.dni }}</td>
           <td>
             <p-tag 
-              [value]="user.rol" 
+              [value]="(user.rol || '').toUpperCase()" 
               [severity]="getRoleSeverity(user.rol)"
               [rounded]="true">
             </p-tag>
@@ -92,7 +92,7 @@
                 [rounded]="true"
                 [text]="true"
                 severity="info"
-                (onClick)="editUser(user.id)"
+                (onClick)="editUser(user._id)"
                 pTooltip="Editar usuario"
                 tooltipPosition="top">
               </p-button>

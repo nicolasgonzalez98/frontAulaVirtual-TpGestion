@@ -57,19 +57,18 @@ export class UserListComponent implements OnInit {
         summary: 'Error',
         detail: 'No se pudieron cargar los usuarios'
       });
-      // Datos de ejemplo si el backend no está disponible
       this.users = this.getMockUsers();
     } finally {
       this.loading = false;
     }
   }
 
-  editUser(id: number) {
-    this.router.navigate(['/admin/users/edit', id]);
+  editUser(id: string) {
+    this.router.navigate(['/admin/usuarios/editar', id]);
   }
 
   newUser() {
-    this.router.navigate(['/admin/users/new']);
+    this.router.navigate(['/admin/usuarios/nuevo']);
   }
 
   async toggleStatus(user: User) {
@@ -81,7 +80,7 @@ export class UserListComponent implements OnInit {
       rejectLabel: 'No',
       accept: async () => {
         try {
-          await this.userService.toggleUserStatus(user.id);
+          await this.userService.toggleUserStatus(user._id);
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
@@ -109,7 +108,7 @@ export class UserListComponent implements OnInit {
       rejectLabel: 'Cancelar',
       accept: async () => {
         try {
-          await this.userService.deleteUser(user.id);
+          await this.userService.deleteUser(user._id);
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
@@ -132,7 +131,8 @@ export class UserListComponent implements OnInit {
   }
 
   getRoleSeverity(role: string): 'danger' | 'info' | 'success' | 'secondary' {
-    switch (role) {
+    const normalizedRole = role?.toUpperCase();
+    switch (normalizedRole) {
       case 'ADMIN': return 'danger';
       case 'PROFESOR': return 'info';
       case 'ESTUDIANTE': return 'success';
@@ -140,48 +140,39 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  // Datos de ejemplo para desarrollo
   private getMockUsers(): User[] {
     return [
       {
-        id: 1,
+        _id: 'mock-1',
         nombre: 'Juan',
         apellido: 'Pérez',
         email: 'juan.perez@example.com',
-        dni: '12345678',
-        rol: 'ESTUDIANTE',
-        activo: true,
-        telefono: '1234567890'
+        rol: 'estudiante',
+        activo: true
       },
       {
-        id: 2,
+        _id: 'mock-2',
         nombre: 'María',
         apellido: 'González',
         email: 'maria.gonzalez@example.com',
-        dni: '87654321',
-        rol: 'PROFESOR',
-        activo: true,
-        telefono: '0987654321'
+        rol: 'docente',
+        activo: true
       },
       {
-        id: 3,
+        _id: 'mock-3',
         nombre: 'Carlos',
         apellido: 'López',
         email: 'carlos.lopez@example.com',
-        dni: '11223344',
-        rol: 'ADMIN',
-        activo: true,
-        telefono: '1122334455'
+        rol: 'admin',
+        activo: false
       },
       {
-        id: 4,
+        _id: 'mock-4',
         nombre: 'Ana',
         apellido: 'Martínez',
         email: 'ana.martinez@example.com',
-        dni: '55667788',
-        rol: 'ESTUDIANTE',
-        activo: false,
-        telefono: '5566778899'
+        rol: 'superadmin',
+        activo: true
       }
     ];
   }
