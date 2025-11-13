@@ -57,7 +57,7 @@ export class UserListComponent implements OnInit {
         summary: 'Error',
         detail: 'No se pudieron cargar los usuarios'
       });
-      this.users = [];
+      this.users = this.getMockUsers();
     } finally {
       this.loading = false;
     }
@@ -138,6 +138,43 @@ export class UserListComponent implements OnInit {
       case 'ESTUDIANTE': return 'success';
       default: return 'secondary';
     }
+  }
+
+  private getMockUsers(): User[] {
+    return [
+      {
+        _id: 'mock-1',
+        nombre: 'Juan',
+        apellido: 'Pérez',
+        email: 'juan.perez@example.com',
+        rol: 'estudiante',
+        activo: true
+      },
+      {
+        _id: 'mock-2',
+        nombre: 'María',
+        apellido: 'González',
+        email: 'maria.gonzalez@example.com',
+        rol: 'docente',
+        activo: true
+      },
+      {
+        _id: 'mock-3',
+        nombre: 'Carlos',
+        apellido: 'López',
+        email: 'carlos.lopez@example.com',
+        rol: 'admin',
+        activo: false
+      },
+      {
+        _id: 'mock-4',
+        nombre: 'Ana',
+        apellido: 'Martínez',
+        email: 'ana.martinez@example.com',
+        rol: 'superadmin',
+        activo: true
+      }
+    ];
   }
 }
 
