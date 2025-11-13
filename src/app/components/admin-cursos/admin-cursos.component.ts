@@ -1,4 +1,3 @@
-// ...existing code...
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CursosService } from '../../../services/cursos.service';
 import { ICurso } from '../../models/curso.models';

@@ -43,4 +43,12 @@ export class CursosService {
     const params = new HttpParams().set('q', q);
     return this.http.get<ICurso[]>(`${this.apiUrl}/buscar`, { params });
   }
+
+  vincularAlumno(cursoId: string, alumnoId: string): Observable<ICurso> {
+    return this.http.post<ICurso>(`${this.apiUrl}/${cursoId}/alumnos/${alumnoId}`, {});
+  }
+
+  desvincularAlumno(cursoId: string, alumnoId: string): Observable<ICurso> {
+    return this.http.delete<ICurso>(`${this.apiUrl}/${cursoId}/alumnos/${alumnoId}`);
+  }
 }
