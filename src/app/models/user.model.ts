@@ -1,11 +1,11 @@
 export interface User {
-  id: number;
+  _id: string;
   nombre: string;
   apellido: string;
   email: string;
   dni: string;
-  rol: 'ESTUDIANTE' | 'PROFESOR' | 'ADMIN';
-  activo: boolean;
+  rol: Rol;
+  active: boolean;
   fechaCreacion?: Date;
   telefono?: string;
 }
@@ -16,7 +16,13 @@ export interface UserForm {
   email: string;
   dni: string;
   rol: string;
-  activo: boolean;
+  active: boolean;
   telefono?: string;
 }
 
+export enum Rol {
+  Alumno = 'alumno',
+  Docente = 'docente',
+  Admin = 'admin',
+  Superadmin = 'superadmin',
+}

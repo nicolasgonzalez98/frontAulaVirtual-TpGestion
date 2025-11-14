@@ -6,7 +6,7 @@ import { User, UserForm } from '../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/api/usuarios'; // api backend?
+  private apiUrl = 'http://localhost:3000/api/usuarios';
 
   async getUsers(): Promise<User[]> {
     try {
@@ -18,7 +18,7 @@ export class UserService {
     }
   }
 
-  async getUserById(id: number): Promise<User> {
+  async getUserById(id: string): Promise<User> {
     try {
       const response = await axios.get<User>(`${this.apiUrl}/${id}`);
       return response.data;
@@ -38,7 +38,7 @@ export class UserService {
     }
   }
 
-  async updateUser(id: number, user: UserForm): Promise<User> {
+  async updateUser(id: string, user: UserForm): Promise<User> {
     try {
       const response = await axios.put<User>(`${this.apiUrl}/${id}`, user);
       return response.data;
@@ -48,7 +48,7 @@ export class UserService {
     }
   }
 
-  async deleteUser(id: number): Promise<void> {
+  async deleteUser(id: string ): Promise<void> {
     try {
       await axios.delete(`${this.apiUrl}/${id}`);
     } catch (error) {
@@ -57,14 +57,9 @@ export class UserService {
     }
   }
 
-  async toggleUserStatus(id: number): Promise<User> {
-    try {
-      const response = await axios.patch<User>(`${this.apiUrl}/${id}/toggle-status`);
-      return response.data;
-    } catch (error) {
-      console.error('Error al cambiar estado:', error);
-      throw error;
-    }
+  async toggleUserStatus(id: string): Promise<User> {
+    const response = await axios.patch<User>(`${this.apiUrl}/${id}/toggle-status`);
+    return response.data; // 👈 tu backend retorna {message, user}
   }
 
   async changeUserRole(id: number, role: string): Promise<User> {

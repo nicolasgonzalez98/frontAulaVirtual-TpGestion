@@ -119,13 +119,13 @@
 
         <!-- Estado Activo -->
         <div class="flex flex-col gap-2 md:col-span-2">
-          <label for="activo" class="font-semibold">
+          <label for="active" class="font-semibold">
             Estado del Usuario
           </label>
           <div class="flex items-center gap-3">
-            <p-inputSwitch formControlName="activo" inputId="activo"></p-inputSwitch>
+            <p-inputSwitch formControlName="active" inputId="active"></p-inputSwitch>
             <span class="text-gray-700">
-              {{ userForm.get('activo')?.value ? 'Usuario Activo' : 'Usuario Inactivo' }}
+              {{ userForm.get('active')?.value ? 'Usuario Activo' : 'Usuario Inactivo' }}
             </span>
           </div>
           <small class="text-gray-600">

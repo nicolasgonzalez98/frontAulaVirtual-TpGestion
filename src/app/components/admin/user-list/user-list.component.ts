@@ -58,13 +58,12 @@ export class UserListComponent implements OnInit {
         detail: 'No se pudieron cargar los usuarios'
       });
       // Datos de ejemplo si el backend no está disponible
-      this.users = this.getMockUsers();
     } finally {
       this.loading = false;
     }
   }
 
-  editUser(id: number) {
+  editUser(id: string) {
     this.router.navigate(['/admin/users/edit', id]);
   }
 
@@ -74,14 +73,14 @@ export class UserListComponent implements OnInit {
 
   async toggleStatus(user: User) {
     this.confirmationService.confirm({
-      message: `¿Desea ${user.activo ? 'desactivar' : 'activar'} a ${user.nombre} ${user.apellido}?`,
+      message: `¿Desea ${user.active ? 'desactivar' : 'activar'} a ${user.nombre} ${user.apellido}?`,
       header: 'Confirmar',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Sí',
       rejectLabel: 'No',
       accept: async () => {
         try {
-          await this.userService.toggleUserStatus(user.id);
+          await this.userService.toggleUserStatus(user._id);
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
@@ -100,6 +99,7 @@ export class UserListComponent implements OnInit {
   }
 
   deleteUser(user: User) {
+    console.log(user)
     this.confirmationService.confirm({
       message: `¿Está seguro de eliminar a ${user.nombre} ${user.apellido}? Esta acción no se puede deshacer.`,
       header: 'Confirmar Eliminación',
@@ -109,7 +109,7 @@ export class UserListComponent implements OnInit {
       rejectLabel: 'Cancelar',
       accept: async () => {
         try {
-          await this.userService.deleteUser(user.id);
+          await this.userService.deleteUser(user._id);
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
@@ -133,57 +133,11 @@ export class UserListComponent implements OnInit {
 
   getRoleSeverity(role: string): 'danger' | 'info' | 'success' | 'secondary' {
     switch (role) {
-      case 'ADMIN': return 'danger';
-      case 'PROFESOR': return 'info';
-      case 'ESTUDIANTE': return 'success';
+      case 'admin': return 'danger';
+      case 'docente': return 'info';
+      case 'estudiante': return 'success';
       default: return 'secondary';
     }
-  }
-
-  // Datos de ejemplo para desarrollo
-  private getMockUsers(): User[] {
-    return [
-      {
-        id: 1,
-        nombre: 'Juan',
-        apellido: 'Pérez',
-        email: 'juan.perez@example.com',
-        dni: '12345678',
-        rol: 'ESTUDIANTE',
-        activo: true,
-        telefono: '1234567890'
-      },
-      {
-        id: 2,
-        nombre: 'María',
-        apellido: 'González',
-        email: 'maria.gonzalez@example.com',
-        dni: '87654321',
-        rol: 'PROFESOR',
-        activo: true,
-        telefono: '0987654321'
-      },
-      {
-        id: 3,
-        nombre: 'Carlos',
-        apellido: 'López',
-        email: 'carlos.lopez@example.com',
-        dni: '11223344',
-        rol: 'ADMIN',
-        activo: true,
-        telefono: '1122334455'
-      },
-      {
-        id: 4,
-        nombre: 'Ana',
-        apellido: 'Martínez',
-        email: 'ana.martinez@example.com',
-        dni: '55667788',
-        rol: 'ESTUDIANTE',
-        activo: false,
-        telefono: '5566778899'
-      }
-    ];
   }
 }
 

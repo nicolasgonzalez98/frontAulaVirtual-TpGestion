@@ -36,14 +36,14 @@ import { User } from '../../../models/user.model';
 export class UserFormComponent implements OnInit {
   userForm: FormGroup;
   isEditMode = false;
-  userId: number | null = null;
+  userId: string ="";
   loading = false;
   submitting = false;
 
   roles = [
-    { label: 'Estudiante', value: 'ESTUDIANTE' },
-    { label: 'Profesor', value: 'PROFESOR' },
-    { label: 'Administrador', value: 'ADMIN' }
+    { label: 'Estudiante', value: 'alumno' },
+    { label: 'Profesor', value: 'docente' },
+    { label: 'Administrador', value: 'admin' }
   ];
 
   constructor(
@@ -59,24 +59,26 @@ export class UserFormComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       dni: ['', [Validators.required, Validators.pattern(/^\d{7,8}$/)]],
       telefono: [''],
-      rol: ['ESTUDIANTE', Validators.required],
-      activo: [true]
+      rol: ['alumno', Validators.required],
+      active: [true]
     });
   }
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
+    console.log(id);
     if (id) {
       this.isEditMode = true;
-      this.userId = parseInt(id);
-      await this.loadUser(this.userId);
+      this.userId = id;
+      await this.loadUser(id);
     }
   }
 
-  async loadUser(id: number) {
+  async loadUser(id: string) {
     try {
       this.loading = true;
       const user = await this.userService.getUserById(id);
+      
       this.userForm.patchValue({
         nombre: user.nombre,
         apellido: user.apellido,
@@ -84,7 +86,7 @@ export class UserFormComponent implements OnInit {
         dni: user.dni,
         telefono: user.telefono || '',
         rol: user.rol,
-        activo: user.activo
+        active: user.active
       });
     } catch (error) {
       this.messageService.add({
@@ -124,6 +126,8 @@ export class UserFormComponent implements OnInit {
           this.router.navigate(['/admin/users']);
         }, 1500);
       } catch (error) {
+        
+        console.error(error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
