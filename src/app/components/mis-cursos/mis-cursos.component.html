@@ -4,7 +4,7 @@
       <h1>Mis Cursos</h1>
       <p>Cursos en los que estás inscripto</p>
     </div>
-
+    
     @if (errorMessage) {
       <div class="dashboard-card" style="background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; margin-bottom: 1rem;">
         <div style="padding: 1rem;">{{ errorMessage }}</div>
@@ -52,6 +52,14 @@
                           style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
                     Ver Curso
                   </button>
+
+                  @if (esDocente && tieneClases(curso._id!)) {
+                    <button (click)="verQR(curso._id!)" 
+                            style="margin-top: 1rem; margin-left: 0.5rem; padding: 0.75rem 1.5rem; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                      <i class="pi pi-qrcode" style="margin-right: 0.5rem;"></i>
+                      QR Asistencia
+                    </button>
+                  }
                 </div>
               </div>
             }

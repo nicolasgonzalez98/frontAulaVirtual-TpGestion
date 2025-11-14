@@ -166,6 +166,17 @@
     cursor: not-allowed;
     transform: none;
   }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
   
   /* Responsividad */
   @media (max-width: 992px) {

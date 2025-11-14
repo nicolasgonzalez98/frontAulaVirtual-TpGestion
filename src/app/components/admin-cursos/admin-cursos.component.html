@@ -6,8 +6,14 @@
     </div>
 
     @if (errorMessage) {
-      <div class="dashboard-card" style="background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; margin-bottom: 1rem;">
-        <div style="padding: 1rem;">{{ errorMessage }}</div>
+      <div style="position: fixed; top: 20px; right: 20px; z-index: 9999; background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease;">
+        {{ errorMessage }}
+      </div>
+    }
+
+    @if (successMessage) {
+      <div style="position: fixed; top: 20px; right: 20px; z-index: 9999; background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 1rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease;">
+        {{ successMessage }}
       </div>
     }
 
@@ -81,12 +87,32 @@
                 </div>
 
                 <div>
+                  <label>Alumnos (separados por comas)</label>
+                  <input type="text" [(ngModel)]="alumnosInput" name="alumnosInput"
+                        placeholder="ID1, ID2, ID3..."
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+
+                <div>
                   <label>Modalidad de Clases *</label>
                   <select [(ngModel)]="cursoForm.modalidadClases" name="modalidadClases" required
                           style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
                     <option value="fechas_preestablecidas">Fechas Preestablecidas</option>
                     <option value="clases_diarias">Clases Diarias</option>
                   </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                  <div>
+                    <label>Fecha Inicio</label>
+                    <input type="date" [(ngModel)]="fechaInicioInput" name="fechaInicio"
+                          style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                  </div>
+                  <div>
+                    <label>Fecha Fin</label>
+                    <input type="date" [(ngModel)]="fechaFinInput" name="fechaFin"
+                          style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                  </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">

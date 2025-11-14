@@ -15,13 +15,17 @@ import { FormsModule } from '@angular/forms';
 export class AdminCursosComponent implements OnInit, OnDestroy {
   cursos: ICurso[] = [];
   selectedCurso: ICurso | null = null;
-  cursoForm: Partial<ICurso> = {}; // usar para crear/editar
+  cursoForm: Partial<ICurso> = {};
   loading = false;
   errorMessage: string | null = null;
+  successMessage: string | null = null;
   showForm = false;
   isEditing = false;
   searchQuery = '';
   docentesInput = '';
+  alumnosInput = '';
+  fechaInicioInput = '';
+  fechaFinInput = '';
 
   private destroy$ = new Subject<void>();
 
@@ -40,6 +44,9 @@ export class AdminCursosComponent implements OnInit, OnDestroy {
   showCreateForm(): void {
     this.cursoForm = { modalidadClases: 'fechas_preestablecidas' };
     this.docentesInput = '';
+    this.alumnosInput = '';
+    this.fechaInicioInput = '';
+    this.fechaFinInput = '';
     this.showForm = true;
     this.isEditing = false;
   }
@@ -47,6 +54,9 @@ export class AdminCursosComponent implements OnInit, OnDestroy {
   showEditForm(curso: ICurso): void {
     this.cursoForm = { ...curso };
     this.docentesInput = curso.docentes?.join(', ') || '';
+    this.alumnosInput = (curso as any).alumnos?.join(', ') || '';
+    this.fechaInicioInput = curso.fechaInicio ? curso.fechaInicio.split('T')[0] : '';
+    this.fechaFinInput = curso.fechaFin ? curso.fechaFin.split('T')[0] : '';
     this.showForm = true;
     this.isEditing = true;
   }
@@ -55,12 +65,27 @@ export class AdminCursosComponent implements OnInit, OnDestroy {
     this.showForm = false;
     this.cursoForm = {};
     this.docentesInput = '';
+    this.alumnosInput = '';
+    this.fechaInicioInput = '';
+    this.fechaFinInput = '';
     this.errorMessage = null;
   }
 
   submitForm(): void {
     if (this.docentesInput.trim()) {
       this.cursoForm.docentes = this.docentesInput.split(',').map(d => d.trim()).filter(d => d);
+    }
+    
+    if (this.alumnosInput.trim()) {
+      (this.cursoForm as any).alumnos = this.alumnosInput.split(',').map(a => a.trim()).filter(a => a);
+    }
+
+    if (this.fechaInicioInput) {
+      this.cursoForm.fechaInicio = this.fechaInicioInput;
+    }
+
+    if (this.fechaFinInput) {
+      this.cursoForm.fechaFin = this.fechaFinInput;
     }
     
     if (this.isEditing && this.cursoForm._id) {
@@ -103,6 +128,7 @@ export class AdminCursosComponent implements OnInit, OnDestroy {
   crearCurso(): void {
     if (!this.cursoForm) return;
     this.loading = true;
+    this.successMessage = null;
     this.errorMessage = null;
     this.cursosService.crearCurso(this.cursoForm)
       .pipe(takeUntil(this.destroy$))
@@ -110,13 +136,17 @@ export class AdminCursosComponent implements OnInit, OnDestroy {
         next: (created) => {
           // agregar al listado y limpiar formulario
           this.cursos.unshift(created);
+          this.successMessage = 'Curso creado con Exito.';
+          this.showForm = false;
           this.cursoForm = {};
           this.loading = false;
+          this.clearMessagesAfterDelay();
         },
         error: (err) => {
           console.error('Error creando curso', err);
           this.errorMessage = 'No se pudo crear el curso.';
           this.loading = false;
+          this.clearMessagesAfterDelay();
         }
       });
   }
@@ -150,6 +180,7 @@ actualizarCurso(id: string, datosEdicion: Partial<ICurso>): void {
 
   this.loading = true;
   this.errorMessage = null;
+  this.successMessage = null;
 
   // Primero buscar el curso por ID
   this.cursosService.obtenerCursoPorId(id)
@@ -175,12 +206,16 @@ actualizarCurso(id: string, datosEdicion: Partial<ICurso>): void {
                 this.cursos[idx] = updated;
               }
               this.selectedCurso = updated;
+              this.successMessage = 'Curso actualizado exitosamente';
+              this.showForm = false;
               this.loading = false;
+              this.clearMessagesAfterDelay();
             },
             error: (err) => {
               console.error('Error actualizando curso', err);
               this.errorMessage = 'No se pudo actualizar el curso.';
               this.loading = false;
+              this.clearMessagesAfterDelay();
             }
           });
       },
@@ -188,6 +223,7 @@ actualizarCurso(id: string, datosEdicion: Partial<ICurso>): void {
         console.error('Error buscando curso para actualizar', err);
         this.errorMessage = 'No se encontró el curso a actualizar.';
         this.loading = false;
+        this.clearMessagesAfterDelay();
       }
     });
 }
@@ -198,18 +234,23 @@ actualizarCurso(id: string, datosEdicion: Partial<ICurso>): void {
     if (!id) return;
     this.loading = true;
     this.errorMessage = null;
+    this.successMessage = null;
+
     this.cursosService.eliminarCurso(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.cursos = this.cursos.filter(c => this.getId(c) !== id);
           if (this.selectedCurso && this.getId(this.selectedCurso) === id) this.selectedCurso = null;
+          this.successMessage = 'Curso eliminado exitosamente';
           this.loading = false;
+          this.clearMessagesAfterDelay();
         },
         error: (err) => {
           console.error('Error eliminando curso', err);
           this.errorMessage = 'No se pudo eliminar el curso.';
           this.loading = false;
+          this.clearMessagesAfterDelay();
         }
       });
   }
@@ -223,26 +264,26 @@ actualizarCurso(id: string, datosEdicion: Partial<ICurso>): void {
     this.loading = true;
     this.errorMessage = null;
     this.cursosService.buscarCursos(q)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (result) => {
-          this.cursos = result || [];
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Error buscando cursos', err);
+    .pipe(takeUntil(this.destroy$))
+    .subscribe({
+      next: (result) => {
+        this.cursos = result || [];
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error buscando cursos', err);
           this.errorMessage = 'Error en la búsqueda de cursos.';
           this.loading = false;
         }
       });
-  }
-
-  // Obtener cursos por establecimiento
-  obtenerPorEstablecimiento(establecimientoId: string): void {
-    if (!establecimientoId) return;
-    this.loading = true;
-    this.errorMessage = null;
-    this.cursosService.obtenerCursosPorEstablecimiento(establecimientoId)
+    }
+    
+    // Obtener cursos por establecimiento
+    obtenerPorEstablecimiento(establecimientoId: string): void {
+      if (!establecimientoId) return;
+      this.loading = true;
+      this.errorMessage = null;
+      this.cursosService.obtenerCursosPorEstablecimiento(establecimientoId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
@@ -255,11 +296,18 @@ actualizarCurso(id: string, datosEdicion: Partial<ICurso>): void {
           this.loading = false;
         }
       });
-  }
+    }
 
-  // Util: normalizar id (puede ser _id o id según backend)
-  private getId(curso: Partial<ICurso>): string {
-    // @ts-ignore
-    return (curso && (curso._id || (curso as any).id)) || '';
-  }
+    private clearMessagesAfterDelay(): void {
+      setTimeout(() => {
+        this.errorMessage = null;
+        this.successMessage = null;
+      }, 3000);
+    }
+    
+    // Util: normalizar id (puede ser _id o id según backend)
+    private getId(curso: Partial<ICurso>): string {
+      // @ts-ignore
+      return (curso && (curso._id || (curso as any).id)) || '';
+    }
 }

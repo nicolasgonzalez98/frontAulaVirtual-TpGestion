@@ -10,6 +10,8 @@ export interface ICurso {
   docentes?: string[];
   alumno?: string[]; // IDs de alumnos
   modalidadClases: 'fechas_preestablecidas' | 'clases_diarias';
+  fechaInicio?: string;
+  fechaFin?: string;
   duracionPorDiaHoras?: number;
   createdAt?: string;
   updatedAt?: string;

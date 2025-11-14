@@ -34,11 +34,12 @@ export class NavbarComponent {
       ]
     },
     {
-      label: 'Usuarios',
+      label: 'Gestiones',
       visible: () => this.isAdmin || this.isSuperAdmin,
       submenuKey: 'showUsuariosMenu',
       submenu: [
         { label: 'Gestionar usuarios', path: '/admin/usuarios', visible: () => this.isAdmin || this.isSuperAdmin },
+        { label: 'Gestionar cursos', path: '/admin/cursos', visible: () => this.isAdmin || this.isSuperAdmin },
         { label: 'Registrar docente', path: '/admin/crear-docente', visible: () => this.isAdmin || this.isSuperAdmin }
       ]
     },

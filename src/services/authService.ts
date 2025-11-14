@@ -11,7 +11,7 @@ import { AxiosAuthService } from './axiosAuthService';
 })
 
 export class AuthService {
-    private apiUrl = environment.api_url_dev;
+    private apiUrl = environment.api_url_dev+'/auth'
 
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
     private userSubject = new BehaviorSubject<IUsuario | null>(this.getUserFromStorage());
@@ -33,7 +33,7 @@ export class AuthService {
 
     async register(data: any){
         try {
-            const response = await axios.post(`${this.apiUrl}/auth/register`, data);
+            const response = await axios.post(`${this.apiUrl}/register`, data);
             return response.data;
         } catch (error: any) {
             throw error.response?.data || { message: 'Error de red o desconocido' };

@@ -39,6 +39,10 @@ export class CursosService {
     return this.http.get<ICurso[]>(`${this.apiUrl}/alumno/${alumnoId}`);
   }
 
+  obtenerCursosPorDocente(docenteId: string): Observable<ICurso[]> {
+    return this.http.get<ICurso[]>(`${this.apiUrl}/docente/${docenteId}`);
+  }
+
   buscarCursos(q: string): Observable<ICurso[]> {
     const params = new HttpParams().set('q', q);
     return this.http.get<ICurso[]>(`${this.apiUrl}/buscar`, { params });
