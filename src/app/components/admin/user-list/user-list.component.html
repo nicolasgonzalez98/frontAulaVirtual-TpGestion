@@ -4,91 +4,85 @@
 
   <div class="mb-6 flex justify-between items-center">
     <h1 class="text-4xl font-bold text-gray-800">Administración de Usuarios</h1>
-    <p-button 
-      label="Nuevo Usuario" 
-      icon="pi pi-plus" 
+
+    <p-button
+      label="Nuevo Usuario"
+      icon="pi pi-plus"
       (onClick)="newUser()"
       severity="success">
     </p-button>
   </div>
 
   <div class="bg-white rounded-lg shadow-lg p-4">
-    <p-table 
-      [value]="users" 
+    <p-table
+      [value]="users"
       [loading]="loading"
       [paginator]="true"
       [rows]="10"
       [rowsPerPageOptions]="[5, 10, 20, 50]"
-      [tableStyle]="{ 'min-width': '60rem' }"
-      styleClass="p-datatable-striped"
-      [globalFilterFields]="['nombre', 'apellido', 'email', 'dni', 'rol']">
-      
-      <ng-template pTemplate="caption">
+      [globalFilterFields]="['nombre', 'apellido', 'email', 'dni', 'rol']"
+      styleClass="p-datatable-striped">
+
+      <!-- <ng-template pTemplate="caption">
         <div class="flex">
           <span class="p-input-icon-left ml-auto">
             <i class="pi pi-search"></i>
-            <input 
-              pInputText 
-              type="text" 
+            <input
+              pInputText
+              type="text"
               #globalFilter
-              (input)="$any($event.target)?.value && users"
-              placeholder="Buscar usuarios..." 
+              (input)="dt.filterGlobal(globalFilter.value, 'contains')"
+              placeholder="Buscar usuarios..."
               class="w-full" />
           </span>
         </div>
-      </ng-template>
+      </ng-template> -->
 
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="_id" style="width: 5%">
-            ID <p-sortIcon field="_id"></p-sortIcon>
-          </th>
-          <th pSortableColumn="nombre" style="width: 20%">
-            Nombre <p-sortIcon field="nombre"></p-sortIcon>
-          </th>
-          <th pSortableColumn="email" style="width: 20%">
-            Email <p-sortIcon field="email"></p-sortIcon>
-          </th>
-          <th pSortableColumn="dni" style="width: 12%">
-            DNI <p-sortIcon field="dni"></p-sortIcon>
-          </th>
-          <th pSortableColumn="rol" style="width: 13%">
-            Rol <p-sortIcon field="rol"></p-sortIcon>
-          </th>
-          <th pSortableColumn="activo" style="width: 10%">
-            Estado <p-sortIcon field="activo"></p-sortIcon>
-          </th>
-          <th style="width: 20%">Acciones</th>
+          <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+          <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+          <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+          <th pSortableColumn="dni">DNI <p-sortIcon field="dni"></p-sortIcon></th>
+          <th pSortableColumn="rol">Rol <p-sortIcon field="rol"></p-sortIcon></th>
+          <th pSortableColumn="active">Estado <p-sortIcon field="active"></p-sortIcon></th>
+          <th>Acciones</th>
         </tr>
       </ng-template>
-      
+
       <ng-template pTemplate="body" let-user>
         <tr>
-          <td>{{ user._id  }}</td>
+          <td>{{ user._id }}</td>
           <td class="font-semibold">{{ user.nombre }} {{ user.apellido }}</td>
+
           <td>
             <i class="pi pi-envelope mr-2 text-gray-500"></i>
             {{ user.email }}
           </td>
+
           <td>{{ user.dni }}</td>
+
           <td>
-            <p-tag 
-              [value]="(user.rol || '').toUpperCase()" 
+            <p-tag
+              [value]="user.rol"
               [severity]="getRoleSeverity(user.rol)"
               [rounded]="true">
             </p-tag>
           </td>
+
           <td>
-            <p-tag 
-              [value]="user.active ? 'Activo' : 'Inactivo'" 
+            <p-tag
+              [value]="user.active ? 'Activo' : 'Inactivo'"
               [severity]="getSeverity(user.active)"
               [rounded]="true">
             </p-tag>
           </td>
+
           <td>
             <div class="flex gap-2">
-              <p-button 
-                icon="pi pi-pencil" 
+
+              <p-button
+                icon="pi pi-pencil"
                 [rounded]="true"
                 [text]="true"
                 severity="info"
@@ -96,18 +90,19 @@
                 pTooltip="Editar usuario"
                 tooltipPosition="top">
               </p-button>
-              <p-button 
+
+              <p-button
                 [icon]="user.active ? 'pi pi-ban' : 'pi pi-check'"
                 [rounded]="true"
                 [text]="true"
                 severity="secondary"
                 (onClick)="toggleStatus(user)"
                 [pTooltip]="user.active ? 'Desactivar usuario' : 'Activar usuario'"
-                tooltipPosition="top"
-                [styleClass]="user.active ? 'text-orange-600' : 'text-green-600'">
+                tooltipPosition="top">
               </p-button>
-              <p-button 
-                icon="pi pi-trash" 
+
+              <p-button
+                icon="pi pi-trash"
                 [rounded]="true"
                 [text]="true"
                 severity="danger"
@@ -115,11 +110,12 @@
                 pTooltip="Eliminar usuario"
                 tooltipPosition="top">
               </p-button>
+
             </div>
           </td>
         </tr>
       </ng-template>
-      
+
       <ng-template pTemplate="emptymessage">
         <tr>
           <td colspan="7" class="text-center py-8">
@@ -128,7 +124,7 @@
           </td>
         </tr>
       </ng-template>
-      
+
       <ng-template pTemplate="loadingbody">
         <tr>
           <td colspan="7" class="text-center py-8">
@@ -137,7 +133,7 @@
           </td>
         </tr>
       </ng-template>
+
     </p-table>
   </div>
 </div>
-

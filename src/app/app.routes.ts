@@ -34,14 +34,14 @@ export const routes: Routes = [
               data: { roles: ['admin'] }
             },
             {
-              path: 'admin/usuarios/nuevo',
+              path: 'admin/users/new',
               loadComponent: () => import('./components/admin/user-form/user-form.component')
                 .then(m => m.UserFormComponent),
               canActivate: [AuthGuard, RoleGuard],
               data: { roles: ['admin'] }
             },
             {
-              path: 'admin/usuarios/editar/:id',
+              path: 'admin/users/edit/:id',
               loadComponent: () => import('./components/admin/user-form/user-form.component')
                 .then(m => m.UserFormComponent),
               canActivate: [AuthGuard, RoleGuard],
