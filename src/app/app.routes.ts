@@ -55,7 +55,7 @@ export const routes: Routes = [
               data: { roles: ['admin'] }
             },
             {
-              path: 'mis-cursos',
+              path: 'cursos/mis-cursos',
               loadComponent: () => import('./components/mis-cursos/mis-cursos.component')
                 .then(m => m.MisCursosComponent),
               canActivate: [AuthGuard]

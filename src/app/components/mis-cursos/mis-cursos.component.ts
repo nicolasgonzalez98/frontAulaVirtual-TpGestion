@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { CursosService } from '../../../services/cursos.service';
 import { AuthService } from '../../../services/authService';
 import { ICurso } from '../../models/curso.models';
@@ -23,7 +24,8 @@ export class MisCursosComponent implements OnInit, OnDestroy {
 
   constructor(
     private cursosService: CursosService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -39,46 +41,35 @@ export class MisCursosComponent implements OnInit, OnDestroy {
   }
 
   loadMisCursos(): void {
-    if (!this.usuario?._id) return;
+    if (!this.usuario?._id) {
+      console.log('❌ No hay usuario ID');
+      return;
+    }
     
+    console.log('✅ Usuario ID:', this.usuario._id);
     this.loading = true;
     this.errorMessage = null;
     
+    console.log('🔄 Llamando a obtenerCursosPorAlumno...');
     this.cursosService.obtenerCursosPorAlumno(this.usuario._id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (cursos) => {
-          this.cursos = this.filtrarCursosVigentes(cursos);
+          console.log('✅ Cursos recibidos:', cursos);
+          this.cursos = cursos;
           this.loading = false;
         },
         error: (err) => {
-          console.error('Error cargando mis cursos', err);
+          console.error('❌ Error cargando mis cursos:', err);
+          console.error('❌ Status:', err.status);
+          console.error('❌ Message:', err.message);
           this.errorMessage = 'No se pudieron cargar tus cursos.';
           this.loading = false;
         }
       });
   }
 
-  private filtrarCursosVigentes(cursos: ICurso[]): ICurso[] {
-    const hoy = new Date();
-    return cursos.filter(curso => {
-      if (!curso.fechaFin) return true;
-      return new Date(curso.fechaFin) >= hoy;
-    });
-  }
-
-  get cursosActivos(): ICurso[] {
-    return this.cursos.filter(curso => {
-      if (!curso.fechaInicio || !curso.fechaFin) return false;
-      const hoy = new Date();
-      return new Date(curso.fechaInicio) <= hoy && new Date(curso.fechaFin) >= hoy;
-    });
-  }
-
-  get cursosProximos(): ICurso[] {
-    return this.cursos.filter(curso => {
-      if (!curso.fechaInicio) return false;
-      return new Date(curso.fechaInicio) > new Date();
-    });
+  verCurso(cursoId: string): void {
+    this.router.navigate(['/curso', cursoId]);
   }
 }

@@ -18,107 +18,44 @@
             <p>Cargando tus cursos...</p>
           </div>
         } @else {
-          <!-- Cursos Activos -->
-          @if (cursosActivos.length > 0) {
-            <div class="dashboard-card">
-              <div style="padding: 1.5rem; border-bottom: 1px solid #e9ecef;">
-                <h3 style="margin: 0; color: #28a745;">
-                  <i class="pi pi-play-circle"></i> Cursos Activos
-                </h3>
+          @if (cursos.length > 0) {
+            @for (curso of cursos; track curso._id) {
+              <div class="dashboard-card" style="margin-bottom: 1rem;">
+                <div style="padding: 1.5rem;">
+                  <h4 style="color: #007bff; font-size: 4.8rem; font-weight: 700; margin: 0 0 1rem 0;">
+                    {{ curso.nombre }}
+                  </h4>
+                  <p style="color: #333; font-size: 1.1rem; margin: 0 0 1rem 0;">
+                    {{ curso.descripcion }}
+                  </p>
+                  
+                  @if (curso.codigo) {
+                    <p style="margin: 0 0 0.5rem 0; color: #555;">
+                      <strong style="color: #333;">Código:</strong> {{ curso.codigo }}
+                    </p>
+                  }
+                  @if (curso.anio) {
+                    <p style="margin: 0 0 0.5rem 0; color: #555;">
+                      <strong style="color: #333;">Año:</strong> {{ curso.anio }}
+                    </p>
+                  }
+                  <p style="margin: 0 0 0.5rem 0; color: #555;">
+                    <strong style="color: #333;">Modalidad:</strong> 
+                    {{ curso.modalidadClases === 'fechas_preestablecidas' ? 'Fechas Preestablecidas' : 'Clases Diarias' }}
+                  </p>
+                  @if (curso.duracionPorDiaHoras) {
+                    <p style="margin: 0; color: #555;">
+                      <strong style="color: #333;">Duración diaria:</strong> {{ curso.duracionPorDiaHoras }} horas
+                    </p>
+                  }
+                  <button (click)="verCurso(curso._id!)" 
+                          style="margin-top: 1rem; padding: 0.75rem 1.5rem; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                    Ver Curso
+                  </button>
+                </div>
               </div>
-              <div style="padding: 1rem;">
-                @for (curso of cursosActivos; track curso._id) {
-                  <div class="dashboard-card" style="margin-bottom: 1rem; border: 1px solid #28a745;">
-                    <div style="padding: 1.5rem;">
-                      <h4 style="margin: 0 0 0.5rem 0; color: #28a745;">{{ curso.nombre }}</h4>
-                      @if (curso.codigo) {
-                        <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
-                          <strong>Código:</strong> {{ curso.codigo }}
-                        </p>
-                      }
-                      @if (curso.anio) {
-                        <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
-                          <strong>Año:</strong> {{ curso.anio }}
-                        </p>
-                      }
-                      @if (curso.descripcion) {
-                        <p style="margin: 0 0 0.5rem 0;">{{ curso.descripcion }}</p>
-                      }
-                      <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
-                        <strong>Modalidad:</strong> 
-                        {{ curso.modalidadClases === 'fechas_preestablecidas' ? 'Fechas Preestablecidas' : 'Clases Diarias' }}
-                      </p>
-                      @if (curso.fechaInicio && curso.fechaFin) {
-                        <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
-                          <strong>Período:</strong> {{ curso.fechaInicio | date:'dd/MM/yyyy' }} - {{ curso.fechaFin | date:'dd/MM/yyyy' }}
-                        </p>
-                      }
-                      @if (curso.duracionPorDiaHoras) {
-                        <p style="margin: 0; color: #6c757d;">
-                          <strong>Duración diaria:</strong> {{ curso.duracionPorDiaHoras }} horas
-                        </p>
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-            </div>
-          }
-
-          <!-- Cursos Próximos -->
-          @if (cursosProximos.length > 0) {
-            <div class="dashboard-card">
-              <div style="padding: 1.5rem; border-bottom: 1px solid #e9ecef;">
-                <h3 style="margin: 0; color: #007bff;">
-                  <i class="pi pi-calendar"></i> Próximos Cursos
-                </h3>
-              </div>
-              <div style="padding: 1rem;">
-                @for (curso of cursosProximos; track curso._id) {
-                  <div class="dashboard-card" style="margin-bottom: 1rem; border: 1px solid #007bff;">
-                    <div style="padding: 1.5rem;">
-                      <h4 style="margin: 0 0 0.5rem 0; color: #007bff;">{{ curso.nombre }}</h4>
-                      @if (curso.codigo) {
-                        <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
-                          <strong>Código:</strong> {{ curso.codigo }}
-                        </p>
-                      }
-                      @if (curso.anio) {
-                        <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
-                          <strong>Año:</strong> {{ curso.anio }}
-                        </p>
-                      }
-                      @if (curso.descripcion) {
-                        <p style="margin: 0 0 0.5rem 0;">{{ curso.descripcion }}</p>
-                      }
-                      <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
-                        <strong>Modalidad:</strong> 
-                        {{ curso.modalidadClases === 'fechas_preestablecidas' ? 'Fechas Preestablecidas' : 'Clases Diarias' }}
-                      </p>
-                      @if (curso.fechaInicio) {
-                        <p style="margin: 0 0 0.5rem 0; color: #007bff;">
-                          <strong>Inicia:</strong> {{ curso.fechaInicio | date:'dd/MM/yyyy' }}
-                        </p>
-                      }
-                      @if (curso.fechaFin) {
-                        <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
-                          <strong>Finaliza:</strong> {{ curso.fechaFin | date:'dd/MM/yyyy' }}
-                        </p>
-                      }
-                      @if (curso.duracionPorDiaHoras) {
-                        <p style="margin: 0; color: #6c757d;">
-                          <strong>Duración diaria:</strong> {{ curso.duracionPorDiaHoras }} horas
-                        </p>
-                      }
-                    </div>
-                  </div>
-                }
-              </div>
-            </div>
-          }
-
-          <!-- Sin cursos -->
-          @if (cursos.length === 0) {
+            }
+          } @else {
             <div class="dashboard-card">
               <div style="padding: 2rem; text-align: center; color: #6c757d;">
                 <i class="pi pi-book" style="font-size: 3rem; margin-bottom: 1rem;"></i>
@@ -137,27 +74,6 @@
           </div>
           <div class="card-content">
             <p>Total de Cursos: <strong>{{ cursos.length }}</strong></p>
-            <p>Cursos Activos: <strong>{{ cursosActivos.length }}</strong></p>
-            <p>Próximos Cursos: <strong>{{ cursosProximos.length }}</strong></p>
-          </div>
-        </div>
-
-        <div class="dashboard-card list-card">
-          <div class="card-header">
-            <i class="pi pi-info-circle"></i>
-            <h3>Estado de Cursos</h3>
-          </div>
-          <div class="card-content">
-            <ul style="list-style: none; padding: 0; margin: 0;">
-              <li style="margin-bottom: 0.5rem; color: #28a745;">
-                <i class="pi pi-circle-fill" style="font-size: 0.5rem; margin-right: 0.5rem;"></i>
-                Activos: En progreso
-              </li>
-              <li style="margin-bottom: 0.5rem; color: #007bff;">
-                <i class="pi pi-circle-fill" style="font-size: 0.5rem; margin-right: 0.5rem;"></i>
-                Próximos: Por comenzar
-              </li>
-            </ul>
           </div>
         </div>
       </div>

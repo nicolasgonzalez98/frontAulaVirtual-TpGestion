@@ -74,10 +74,6 @@ export class AdminCursosComponent implements OnInit, OnDestroy {
     this.buscarCursos(this.searchQuery);
   }
   
-  get cursosActivos(): number {
-    return this.cursos.filter(c => c.fechaFin && new Date(c.fechaFin) > new Date()).length;
-  }
-
   confirmDelete(curso: ICurso): void {
     if (confirm(`¿Estás seguro de eliminar el curso "${curso.nombre}"?`)) {
       this.eliminarCurso(this.getId(curso));

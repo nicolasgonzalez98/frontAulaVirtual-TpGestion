@@ -11,7 +11,7 @@ import { AxiosAuthService } from './axiosAuthService';
 })
 
 export class AuthService {
-    private apiUrl = "http://localhost:4200/api/auth"
+    private apiUrl = environment.api_url_dev;
 
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
     private userSubject = new BehaviorSubject<IUsuario | null>(this.getUserFromStorage());
@@ -33,7 +33,7 @@ export class AuthService {
 
     async register(data: any){
         try {
-            const response = await axios.post(`${this.apiUrl}/register`, data);
+            const response = await axios.post(`${this.apiUrl}/auth/register`, data);
             return response.data;
         } catch (error: any) {
             throw error.response?.data || { message: 'Error de red o desconocido' };
@@ -43,7 +43,7 @@ export class AuthService {
     async login(data: { email: string; password: string }): Promise<{ message: string; token: string; user: IUsuario }> {
         try {
                 const axiosAuth = this.injector.get(AxiosAuthService);
-                const response = await axiosAuth.client.post(`/login`, data);
+                const response = await axiosAuth.client.post(`/auth/login`, data);
 
                 const user: IUsuario = response.data.user;
 

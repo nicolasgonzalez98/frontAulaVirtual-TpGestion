@@ -1,196 +1,176 @@
 /* Estilos generales del Home */ 
 .home-container {
-    padding: 2rem;
-    background-color: #f4f7f9;
-    min-height: calc(100vh - 60px);
-  }
-  
-  .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 200px;
-    font-size: 1.2rem;
-    color: #6c757d;
-  }
-  
-  /* --- Estilos para Dashboards --- */
-  
-  /* Contenedores de dashboards específicos */
-  .student-dashboard, .teacher-dashboard, .admin-dashboard {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  /* Layout de 2 columnas */
-  .student-dashboard-content, .teacher-dashboard-content, .admin-dashboard-content {
-    display: flex;
-    gap: 2rem;
-  }
-  
-  .main-column {
-    flex: 2;
-    display: flex;
+  padding: 2rem;
+  background-color: #f4f7f9;
+  min-height: calc(100vh - 60px);
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+/* Contenedores de dashboards específicos */
+.student-dashboard, .teacher-dashboard, .admin-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Layout de 2 columnas */
+.student-dashboard-content, .teacher-dashboard-content, .admin-dashboard-content {
+  display: flex;
+  gap: 2rem;
+}
+
+.main-column {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sidebar-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Tarjetas de Dashboard - Compatible con modo oscuro */
+.dashboard-card {
+  background-color: #ffffff;
+  color: #212529;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Título del curso - Resaltado */
+.dashboard-card h4 {
+  color: #007bff !important;
+  font-size: 3rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 1rem 0 !important;
+}
+
+/* Descripción del curso */
+.dashboard-card p {
+  color: #495057 !important;
+}
+
+/* Banners de Bienvenida */
+.welcome-banner {
+  color: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.welcome-banner h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: white;
+}
+
+.welcome-banner p {
+  margin: 0;
+  font-size: 1.2rem;
+  opacity: 0.9;
+  color: white;
+}
+
+/* Banner Alumno */
+.student-dashboard .welcome-banner {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+}
+
+/* Tarjetas en la columna lateral */
+.sidebar-column .dashboard-card {
+  padding: 1.5rem;
+}
+
+.sidebar-column .card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.sidebar-column .card-header i {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  color: #007bff;
+}
+
+.sidebar-column .card-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.card-content p {
+  line-height: 1.6;
+  color: #495057;
+}
+
+.card-content strong {
+  color: #212529;
+}
+
+/* Responsividad */
+@media (max-width: 992px) {
+  .student-dashboard-content {
     flex-direction: column;
-    gap: 2rem;
   }
-  
-  .sidebar-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+}
+
+/* Soporte para modo oscuro del navegador */
+@media (prefers-color-scheme: dark) {
+  .home-container {
+    background-color: #1a1a1a;
   }
-  
-  /* Tarjetas de Dashboard (Estilo base) */
+
   .dashboard-card {
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #2d2d2d;
+    color: #e9ecef;
+    border-color: #404040;
   }
-  
-  .dashboard-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+
+  .dashboard-card h4 {
+    color: #4dabf7 !important;
   }
-  
-  /* Banners de Bienvenida */
-  .welcome-banner {
-    color: white;
-    padding: 2.5rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
+
+  .dashboard-card p {
+    color: #ced4da !important;
   }
-  
-  .welcome-banner h1 {
-    margin: 0 0 0.5rem 0;
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: white;
-  }
-  
-  .welcome-banner p {
-    margin: 0;
-    font-size: 1.2rem;
-    opacity: 0.9;
-    color: white;
-  }
-  
-  /* Banner Alumno */
-  .student-dashboard .welcome-banner {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-  }
-  
-  /* Tarjetas en la columna lateral */
-  .sidebar-column .dashboard-card {
-    padding: 1.5rem;
-  }
-  
-  .sidebar-column .card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e9ecef;
-  }
-  
-  .sidebar-column .card-header i {
-    font-size: 1.5rem;
-    margin-right: 1rem;
-    color: #6c757d;
-  }
-  
+
   .sidebar-column .card-header h3 {
-    margin: 0;
-    font-size: 1.3rem;
-    font-weight: 500;
+    color: #0cbc0c;
   }
-  
-  .card-content p, .card-content li {
-    line-height: 1.6;
+
+  .card-content p {
+    color: #ced4da;
   }
-  
-  .list-card ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+
+  .card-content strong {
+    color: #f8f9fa;
   }
-  
-  .list-card li {
-    margin-bottom: 0.75rem;
+
+  .sidebar-column .card-header {
+    border-bottom-color: #404040;
   }
-  
-  /* Estilos específicos para tarjetas de cursos */
-  .curso-card {
-    margin-bottom: 1rem;
-    border-left: 4px solid transparent;
-    transition: all 0.3s ease;
-  }
-  
-  .curso-card.activo {
-    border-left-color: #28a745;
-  }
-  
-  .curso-card.proximo {
-    border-left-color: #007bff;
-  }
-  
-  .curso-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .curso-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  
-  .curso-header i {
-    font-size: 1.2rem;
-    margin-right: 0.5rem;
-  }
-  
-  .curso-header.activo {
-    color: #28a745;
-  }
-  
-  .curso-header.proximo {
-    color: #007bff;
-  }
-  
-  .curso-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  
-  .info-item {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .info-label {
-    font-weight: 500;
-    color: #6c757d;
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
-  }
-  
-  .info-value {
-    color: #495057;
-  }
-  
-  /* Responsividad */
-  @media (max-width: 992px) {
-    .student-dashboard-content {
-      flex-direction: column;
-    }
-    
-    .curso-info {
-      grid-template-columns: 1fr;
-    }
-  }
+}

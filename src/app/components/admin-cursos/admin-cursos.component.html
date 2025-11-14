@@ -76,8 +76,8 @@
                 <div>
                   <label>Docentes (separados por comas)</label>
                   <input type="text" [(ngModel)]="docentesInput" name="docentesInput"
-                         placeholder="ID1, ID2, ID3..."
-                         style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+                        placeholder="ID1, ID2, ID3..."
+                        style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
                 </div>
 
                 <div>
@@ -90,16 +90,6 @@
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-                  <div>
-                    <label>Fecha Inicio</label>
-                    <input type="date" [(ngModel)]="cursoForm.fechaInicio" name="fechaInicio"
-                           style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
-                  </div>
-                  <div>
-                    <label>Fecha Fin</label>
-                    <input type="date" [(ngModel)]="cursoForm.fechaFin" name="fechaFin"
-                           style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
-                  </div>
                   <div>
                     <label>Duración por Día (horas)</label>
                     <input type="number" [(ngModel)]="cursoForm.duracionPorDiaHoras" name="duracionPorDiaHoras"
@@ -144,11 +134,6 @@
                     <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
                       <strong>Modalidad:</strong> {{ curso.modalidadClases === 'fechas_preestablecidas' ? 'Fechas Preestablecidas' : 'Clases Diarias' }}
                     </p>
-                    @if (curso.fechaInicio && curso.fechaFin) {
-                      <p style="margin: 0 0 0.5rem 0; color: #6c757d;">
-                        <strong>Período:</strong> {{ curso.fechaInicio }} - {{ curso.fechaFin }}
-                      </p>
-                    }
                     @if (curso.docentes && curso.docentes.length > 0) {
                       <p style="margin: 0; color: #6c757d;">
                         <strong>Docentes:</strong> {{ curso.docentes.length }} asignado(s)
@@ -187,7 +172,6 @@
           </div>
           <div class="card-content">
             <p>Total de Cursos: <strong>{{ cursos.length }}</strong></p>
-            <p>Cursos Activos: <strong>{{ cursosActivos }}</strong></p>
           </div>
         </div>
 
