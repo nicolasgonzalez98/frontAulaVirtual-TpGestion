@@ -56,11 +56,7 @@ export class RegisterComponent {
       this.successMessage = 'Usuario registrado correctamente';
       this.registerForm.reset();
 
-      if (!this.isAdminCreatingUser) {
-        this.router.navigate(['/login'], { queryParams: { registrado: true } });
-      } else {
-        this.router.navigate(['/admin/usuarios'], { queryParams: { registrado: true } });
-      }
+      this.router.navigate(['/login'], { queryParams: { registrado: true } });
     } catch (err: any) {
       this.errorMessage = err.message || 'Error al registrar usuario';
     } finally {

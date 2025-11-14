@@ -68,7 +68,7 @@ export class UserListComponent implements OnInit {
   }
 
   newUser() {
-    this.router.navigate(['/admin/users/new']);
+    this.router.navigate(['/admin/usuarios/nuevo']);
   }
 
   async toggleStatus(user: User) {

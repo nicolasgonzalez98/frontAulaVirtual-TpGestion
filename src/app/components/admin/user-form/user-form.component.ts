@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
-import { InputSwitchModule } from 'primeng/inputswitch';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { UserService } from '../../../services/user.service';
-import { User } from '../../../models/user.model';
+import { User, UserForm } from '../../../models/user.model';
 
 @Component({
   selector: 'app-user-form',
@@ -21,7 +20,6 @@ import { User } from '../../../models/user.model';
     CardModule,
     InputTextModule,
     DropdownModule,
-    InputSwitchModule,
     ButtonModule,
     ToastModule
   ],
@@ -94,7 +92,7 @@ export class UserFormComponent implements OnInit {
         summary: 'Error',
         detail: 'No se pudo cargar el usuario'
       });
-      this.router.navigate(['/admin/users']);
+      this.router.navigate(['/admin/usuarios']);
     } finally {
       this.loading = false;
     }
@@ -104,7 +102,13 @@ export class UserFormComponent implements OnInit {
     if (this.userForm.valid) {
       try {
         this.submitting = true;
-        const formData = this.userForm.value;
+        const { confirmPassword, ...rawData } = this.userForm.value;
+        const formData = { ...rawData } as UserForm;
+
+        if (!formData.password) {
+          delete formData.password;
+        }
+        formData.rol = formData.rol?.toString().toLowerCase();
 
         if (this.isEditMode && this.userId) {
           await this.userService.updateUser(this.userId, formData);
@@ -123,7 +127,7 @@ export class UserFormComponent implements OnInit {
         }
 
         setTimeout(() => {
-          this.router.navigate(['/admin/users']);
+          this.router.navigate(['/admin/usuarios']);
         }, 1500);
       } catch (error) {
         
@@ -148,8 +152,35 @@ export class UserFormComponent implements OnInit {
     }
   }
 
+  private setPasswordValidators(isRequired: boolean) {
+    const passwordControl = this.userForm.get('password');
+    const confirmPasswordControl = this.userForm.get('confirmPassword');
+
+    if (isRequired) {
+      passwordControl?.setValidators([Validators.required, Validators.minLength(8)]);
+      confirmPasswordControl?.setValidators([Validators.required]);
+    } else {
+      passwordControl?.clearValidators();
+      confirmPasswordControl?.clearValidators();
+    }
+
+    passwordControl?.updateValueAndValidity();
+    confirmPasswordControl?.updateValueAndValidity();
+  }
+
+  private passwordsMatchValidator(group: FormGroup): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const confirm = group.get('confirmPassword')?.value;
+
+    if (!password && !confirm) {
+      return null;
+    }
+
+    return password === confirm ? null : { passwordsMismatch: true };
+  }
+
   onCancel() {
-    this.router.navigate(['/admin/users']);
+    this.router.navigate(['/admin/usuarios']);
   }
 
   isFieldInvalid(fieldName: string): boolean {
@@ -163,7 +194,9 @@ export class UserFormComponent implements OnInit {
       if (field.errors['required']) return 'Este campo es requerido';
       if (field.errors['email']) return 'Email inválido';
       if (field.errors['minlength']) return `Mínimo ${field.errors['minlength'].requiredLength} caracteres`;
-      if (field.errors['pattern']) return 'DNI debe tener 7 u 8 dígitos';
+    }
+    if (fieldName === 'confirmPassword' && this.userForm.errors?.['passwordsMismatch']) {
+      return 'Las contraseñas no coinciden';
     }
     return '';
   }

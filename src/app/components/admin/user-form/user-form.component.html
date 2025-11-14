@@ -66,34 +66,40 @@
           </small>
         </div>
 
-        <!-- DNI -->
-        <div class="flex flex-col gap-2">
-          <label for="dni" class="font-semibold">
-            DNI <span class="text-red-500">*</span>
+        <!-- Contraseña -->
+        <div class="flex flex-col gap-2" *ngIf="!isEditMode">
+          <label for="password" class="font-semibold">
+            Contraseña <span class="text-red-500">*</span>
           </label>
           <input 
             pInputText 
-            id="dni" 
-            formControlName="dni"
-            placeholder="12345678"
-            maxlength="8"
-            [class.ng-invalid]="isFieldInvalid('dni')"
-            [class.ng-dirty]="isFieldInvalid('dni')" />
-          <small class="text-red-500" *ngIf="isFieldInvalid('dni')">
-            {{ getFieldError('dni') }}
+            id="password" 
+            type="password"
+            formControlName="password"
+            placeholder="Mínimo 8 caracteres"
+            [class.ng-invalid]="isFieldInvalid('password')"
+            [class.ng-dirty]="isFieldInvalid('password')" />
+          <small class="text-red-500" *ngIf="isFieldInvalid('password')">
+            {{ getFieldError('password') }}
           </small>
         </div>
 
-        <!-- Teléfono -->
-        <div class="flex flex-col gap-2">
-          <label for="telefono" class="font-semibold">
-            Teléfono
+        <!-- Confirmar Contraseña -->
+        <div class="flex flex-col gap-2" *ngIf="!isEditMode">
+          <label for="confirmPassword" class="font-semibold">
+            Confirmar contraseña <span class="text-red-500">*</span>
           </label>
           <input 
             pInputText 
-            id="telefono" 
-            formControlName="telefono"
-            placeholder="1234567890" />
+            id="confirmPassword" 
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="Repita la contraseña"
+            [class.ng-invalid]="isFieldInvalid('confirmPassword') || (userForm.errors?.['passwordsMismatch'] && userForm.get('confirmPassword')?.touched)"
+            [class.ng-dirty]="isFieldInvalid('confirmPassword') || (userForm.errors?.['passwordsMismatch'] && userForm.get('confirmPassword')?.touched)" />
+          <small class="text-red-500" *ngIf="isFieldInvalid('confirmPassword') || (userForm.errors?.['passwordsMismatch'] && userForm.get('confirmPassword')?.touched)">
+            {{ getFieldError('confirmPassword') }}
+          </small>
         </div>
 
         <!-- Rol -->
