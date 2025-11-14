@@ -9,10 +9,11 @@ import { IUsuario } from '../../models/usuario.models';
 import { IClase } from '../../models/clase.models';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CursoComponent } from '../curso/curso.component';
 
 @Component({
   selector: 'app-mis-cursos',
-  imports: [CommonModule],
+  imports: [CommonModule,CursoComponent],
   templateUrl: './mis-cursos.component.html',
   styleUrl: './mis-cursos.component.css'
 })

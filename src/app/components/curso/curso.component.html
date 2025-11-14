@@ -1,0 +1,112 @@
+<div class="curso-container card">
+
+  <h2 class="card-title">Curso</h2>
+
+  <div *ngIf="userSignal() as user">
+    <ng-container [ngSwitch]="user?.rol?.toLowerCase()">
+
+      <!-- ALUMNO -->
+      <ng-container *ngSwitchCase="'alumno'">
+        <h3 class="section-title">Vista Alumno</h3>
+
+        <div class="card inner-card alumno-card">
+          <div class="item">
+            <div class="status">
+              <span class="dot present"></span>
+              <span>Presente</span>
+            </div>
+            <div class="muted">Clase: POO • 10:00 - 11:00</div>
+          </div>
+
+          <div class="item">
+            <div class="status">
+              <span class="dot absent"></span>
+              <span>Ausente</span>
+            </div>
+            <div class="muted">Clase: Base de datos • 12:00 - 13:00</div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- DOCENTE -->
+      <ng-container *ngSwitchCase="'docente'">
+        <h3 class="section-title">Vista Docente</h3>
+
+        <div class="card inner-card docente-card">
+          <p class="muted">Marque la casilla si el alumno está presente</p>
+
+          <ul>
+            <li>
+              <label class="checkbox-label">
+                <input type="checkbox" checked>
+                Juan Pérez
+                <span class="estado"></span>
+              </label>
+            </li>
+
+            <li>
+              <label class="checkbox-label">
+                <input type="checkbox">
+                María Gómez
+                <span class="estado"></span>
+              </label>
+            </li>
+
+            <li>
+              <label class="checkbox-label">
+                <input type="checkbox" checked>
+                Luis Fernández
+                <span class="estado"></span>
+              </label>
+            </li>
+
+            <li>
+              <label class="checkbox-label">
+                <input type="checkbox">
+                Ana Rodríguez
+                <span class="estado"></span>
+              </label>
+            </li>
+
+            <li>
+              <label class="checkbox-label">
+                <input type="checkbox">
+                Carlos Méndez
+                <span class="estado"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+
+      <!-- DEFAULT -->
+      <ng-container *ngSwitchDefault>
+        <h3 class="section-title">Vista sin rol</h3>
+        <p class="muted">Mostrando ejemplos</p>
+
+        <div class="card inner-card alumno-card">
+          <div class="item">
+            <div class="status">
+              <span class="dot present"></span>
+              <span>Presente</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card inner-card docente-card">
+          <ul>
+            <li>
+              <label class="checkbox-label">
+                <input type="checkbox">
+                Ejemplo Alumno
+                <span class="estado"></span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+
+    </ng-container>
+  </div>
+
+</div>
