@@ -11,7 +11,7 @@ import { AxiosAuthService } from './axiosAuthService';
 })
 
 export class AuthService {
-    private apiUrl = environment.api_url_dev+'/auth';
+    private apiUrl = environment.api_url_dev+'/auth'
 
     private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
     private userSubject = new BehaviorSubject<IUsuario | null>(this.getUserFromStorage());

@@ -6,12 +6,13 @@ export interface ICurso {
   codigo?: string;
   anio?: number;
   descripcion?: string;
-  establecimiento: string | IEstablecimiento;  // puede venir populado o solo con el ID
-  docentes?: string[];                         // IDs de usuarios o usuarios populados más adelante
+  establecimiento: string | IEstablecimiento;
+  docentes?: string[];
+  alumno?: string[]; // IDs de alumnos
   modalidadClases: 'fechas_preestablecidas' | 'clases_diarias';
-  fechaInicio?: string;                        // se maneja como string al recibir desde la API
+  fechaInicio?: string;
   fechaFin?: string;
   duracionPorDiaHoras?: number;
   createdAt?: string;
-  updatedAt?: string
+  updatedAt?: string;
 }
