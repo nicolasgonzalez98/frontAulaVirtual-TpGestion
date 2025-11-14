@@ -6,7 +6,7 @@ import { User, UserForm } from '../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = 'http://localhost:3000/api/usuarios';
 
   async getUsers(): Promise<User[]> {
     try {
@@ -50,7 +50,7 @@ export class UserService {
     }
   }
 
-  async deleteUser(id: string): Promise<void> {
+  async deleteUser(id: string ): Promise<void> {
     try {
       await axios.delete(`${this.apiUrl}/${id}`);
     } catch (error) {
@@ -60,13 +60,8 @@ export class UserService {
   }
 
   async toggleUserStatus(id: string): Promise<User> {
-    try {
-      const response = await axios.patch<User>(`${this.apiUrl}/${id}/toggle-status`);
-      return this.normalizeUser(response.data);
-    } catch (error) {
-      console.error('Error al cambiar estado:', error);
-      throw error;
-    }
+    const response = await axios.patch<User>(`${this.apiUrl}/${id}/toggle-status`);
+    return response.data; // 👈 tu backend retorna {message, user}
   }
 
   async changeUserRole(id: string, role: string): Promise<User> {

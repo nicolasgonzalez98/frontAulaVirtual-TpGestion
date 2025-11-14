@@ -57,14 +57,14 @@ export class UserListComponent implements OnInit {
         summary: 'Error',
         detail: 'No se pudieron cargar los usuarios'
       });
-      this.users = this.getMockUsers();
+      // Datos de ejemplo si el backend no está disponible
     } finally {
       this.loading = false;
     }
   }
 
   editUser(id: string) {
-    this.router.navigate(['/admin/usuarios/editar', id]);
+    this.router.navigate(['/admin/users/edit', id]);
   }
 
   newUser() {
@@ -73,7 +73,7 @@ export class UserListComponent implements OnInit {
 
   async toggleStatus(user: User) {
     this.confirmationService.confirm({
-      message: `¿Desea ${user.activo ? 'desactivar' : 'activar'} a ${user.nombre} ${user.apellido}?`,
+      message: `¿Desea ${user.active ? 'desactivar' : 'activar'} a ${user.nombre} ${user.apellido}?`,
       header: 'Confirmar',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Sí',
@@ -99,6 +99,7 @@ export class UserListComponent implements OnInit {
   }
 
   deleteUser(user: User) {
+    console.log(user)
     this.confirmationService.confirm({
       message: `¿Está seguro de eliminar a ${user.nombre} ${user.apellido}? Esta acción no se puede deshacer.`,
       header: 'Confirmar Eliminación',
@@ -131,50 +132,12 @@ export class UserListComponent implements OnInit {
   }
 
   getRoleSeverity(role: string): 'danger' | 'info' | 'success' | 'secondary' {
-    const normalizedRole = role?.toUpperCase();
-    switch (normalizedRole) {
-      case 'ADMIN': return 'danger';
-      case 'PROFESOR': return 'info';
-      case 'ESTUDIANTE': return 'success';
+    switch (role) {
+      case 'admin': return 'danger';
+      case 'docente': return 'info';
+      case 'estudiante': return 'success';
       default: return 'secondary';
     }
-  }
-
-  private getMockUsers(): User[] {
-    return [
-      {
-        _id: 'mock-1',
-        nombre: 'Juan',
-        apellido: 'Pérez',
-        email: 'juan.perez@example.com',
-        rol: 'estudiante',
-        activo: true
-      },
-      {
-        _id: 'mock-2',
-        nombre: 'María',
-        apellido: 'González',
-        email: 'maria.gonzalez@example.com',
-        rol: 'docente',
-        activo: true
-      },
-      {
-        _id: 'mock-3',
-        nombre: 'Carlos',
-        apellido: 'López',
-        email: 'carlos.lopez@example.com',
-        rol: 'admin',
-        activo: false
-      },
-      {
-        _id: 'mock-4',
-        nombre: 'Ana',
-        apellido: 'Martínez',
-        email: 'ana.martinez@example.com',
-        rol: 'superadmin',
-        activo: true
-      }
-    ];
   }
 }
 

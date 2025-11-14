@@ -64,7 +64,7 @@
       
       <ng-template pTemplate="body" let-user>
         <tr>
-          <td>{{ user._id }}</td>
+          <td>{{ user._id  }}</td>
           <td class="font-semibold">{{ user.nombre }} {{ user.apellido }}</td>
           <td>
             <i class="pi pi-envelope mr-2 text-gray-500"></i>
@@ -80,8 +80,8 @@
           </td>
           <td>
             <p-tag 
-              [value]="user.activo ? 'Activo' : 'Inactivo'" 
-              [severity]="getSeverity(user.activo)"
+              [value]="user.active ? 'Activo' : 'Inactivo'" 
+              [severity]="getSeverity(user.active)"
               [rounded]="true">
             </p-tag>
           </td>
@@ -97,14 +97,14 @@
                 tooltipPosition="top">
               </p-button>
               <p-button 
-                [icon]="user.activo ? 'pi pi-ban' : 'pi pi-check'"
+                [icon]="user.active ? 'pi pi-ban' : 'pi pi-check'"
                 [rounded]="true"
                 [text]="true"
                 severity="secondary"
                 (onClick)="toggleStatus(user)"
-                [pTooltip]="user.activo ? 'Desactivar usuario' : 'Activar usuario'"
+                [pTooltip]="user.active ? 'Desactivar usuario' : 'Activar usuario'"
                 tooltipPosition="top"
-                [styleClass]="user.activo ? 'text-orange-600' : 'text-green-600'">
+                [styleClass]="user.active ? 'text-orange-600' : 'text-green-600'">
               </p-button>
               <p-button 
                 icon="pi pi-trash" 

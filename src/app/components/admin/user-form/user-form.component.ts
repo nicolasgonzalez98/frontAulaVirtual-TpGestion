@@ -34,15 +34,14 @@ import { User, UserForm } from '../../../models/user.model';
 export class UserFormComponent implements OnInit {
   userForm: FormGroup;
   isEditMode = false;
-  userId: string | null = null;
+  userId: string ="";
   loading = false;
   submitting = false;
 
   roles = [
     { label: 'Estudiante', value: 'alumno' },
     { label: 'Profesor', value: 'docente' },
-    { label: 'Administrador', value: 'admin' },
-    { label: 'Super Administrador', value: 'superadmin' }
+    { label: 'Administrador', value: 'admin' }
   ];
 
   constructor(
@@ -52,40 +51,40 @@ export class UserFormComponent implements OnInit {
     private route: ActivatedRoute,
     private messageService: MessageService
   ) {
-    this.userForm = this.fb.group(
-      {
-        nombre: ['', [Validators.required, Validators.minLength(2)]],
-        apellido: ['', [Validators.required, Validators.minLength(2)]],
-        email: ['', [Validators.required, Validators.email]],
-        rol: ['admin', Validators.required],
-        password: [''],
-        confirmPassword: ['']
-      },
-      { validators: this.passwordsMatchValidator }
-    );
+    this.userForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.minLength(2)]],
+      apellido: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      dni: ['', [Validators.required, Validators.pattern(/^\d{7,8}$/)]],
+      telefono: [''],
+      rol: ['alumno', Validators.required],
+      active: [true]
+    });
   }
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
+    console.log(id);
     if (id) {
       this.isEditMode = true;
       this.userId = id;
-      this.setPasswordValidators(false);
-      await this.loadUser(this.userId);
-    } else {
-      this.setPasswordValidators(true);
+      await this.loadUser(id);
     }
   }
 
   async loadUser(id: string) {
     try {
       this.loading = true;
-      const user: User = await this.userService.getUserById(id);
+      const user = await this.userService.getUserById(id);
+      
       this.userForm.patchValue({
         nombre: user.nombre,
         apellido: user.apellido,
         email: user.email,
-        rol: (user.rol ?? '').toLowerCase()
+        dni: user.dni,
+        telefono: user.telefono || '',
+        rol: user.rol,
+        active: user.active
       });
     } catch (error) {
       this.messageService.add({
@@ -131,6 +130,8 @@ export class UserFormComponent implements OnInit {
           this.router.navigate(['/admin/usuarios']);
         }, 1500);
       } catch (error) {
+        
+        console.error(error);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

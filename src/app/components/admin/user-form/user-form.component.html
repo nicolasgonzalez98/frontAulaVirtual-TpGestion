@@ -123,6 +123,22 @@
           </small>
         </div>
 
+        <!-- Estado Activo -->
+        <div class="flex flex-col gap-2 md:col-span-2">
+          <label for="active" class="font-semibold">
+            Estado del Usuario
+          </label>
+          <div class="flex items-center gap-3">
+            <p-inputSwitch formControlName="active" inputId="active"></p-inputSwitch>
+            <span class="text-gray-700">
+              {{ userForm.get('active')?.value ? 'Usuario Activo' : 'Usuario Inactivo' }}
+            </span>
+          </div>
+          <small class="text-gray-600">
+            Los usuarios inactivos no podrán acceder al sistema
+          </small>
+        </div>
+
       </div>
 
       <!-- Botones -->

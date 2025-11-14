@@ -3,9 +3,9 @@ export interface User {
   nombre: string;
   apellido: string;
   email: string;
-  dni?: string;
-  rol: string;
-  activo?: boolean;
+  dni: string;
+  rol: Rol;
+  active: boolean;
   fechaCreacion?: Date;
   telefono?: string;
   establecimientos?: string[];
@@ -19,7 +19,13 @@ export interface UserForm {
   apellido: string;
   email: string;
   rol: string;
-  password?: string;
-  confirmPassword?: string;
+  active: boolean;
+  telefono?: string;
 }
 
+export enum Rol {
+  Alumno = 'alumno',
+  Docente = 'docente',
+  Admin = 'admin',
+  Superadmin = 'superadmin',
+}
