@@ -1,7 +1,14 @@
 const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 const targetPath = './src/environments/environment.ts';
+const envDir = path.dirname(targetPath);
+
+if (!fs.existsSync(envDir)) {
+  fs.mkdirSync(envDir, { recursive: true });
+}
+
 const envConfigFile = `export const environment = {
   production: false,
   googleMapsApiKey: '${process.env.MAPS_API_KEY}',
